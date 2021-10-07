@@ -13,7 +13,7 @@ app = Flask(__name__, static_url_path = "", static_folder = "static", template_f
 app.secret_key = "cairocoders-ednalan"
 
 DB_HOST = "localhost"
-DB_NAME = "simple_linear"
+DB_NAME = "mlModels"
 DB_USER = "admin"
 DB_PASS = "admin"
 
