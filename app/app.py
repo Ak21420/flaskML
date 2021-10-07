@@ -81,12 +81,13 @@ def simple_linear():
             model = load('model.joblib')
 
             try:
-                cur.execute("INSERT INTO simple(txt_numbers,datetime,image) VALUES (%s,%s,%s)", (text,Dtime,random_string))
+                cur.execute("INSERT INTO simple(txt_numbers,datetime,image,is_delete) VALUES (%s,%s,%s,FALSE)", (text,Dtime,random_string))
             except:
                 return "Third"
 
             try:
                 conn.commit()
+                cur.close()
             except:
                 return "Forth"
 
@@ -125,10 +126,10 @@ def simple_linear_layout():
 
         # print("First")
             
-        s = "SELECT * FROM simple"
+        s = "SELECT * FROM simple WHERE is_delete=FALSE"
         cur.execute(s) # Execute the SQL
         list_users = cur.fetchall()
-      
+        cur.close()
         # print("2131")
         # print(list_users)
         return render_template('sLinear_layout.html', list_users = list_users)
@@ -138,33 +139,34 @@ def simple_linear_layout():
 
 
 
-@app.route('/delete/<string:id>', methods = ['POST','GET'])
-def delete_student(id):
+@app.route('/simple_Linear_delete/<string:id>', methods = ['POST','GET'])
+def simple_Linear_delete(id):
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-   
-    cur.execute('DELETE FROM simple WHERE simpleid = {0}'.format(id))
+    
+    cur.execute('UPDATE simple SET is_delete = TRUE WHERE simpleid = {0}'.format(id))
     conn.commit()
+    cur.close()
     flash('Data Removed Successfully')
     return redirect(url_for('simple_linear_layout'))
 
 
-@app.route('/edit/<id>', methods = ['POST', 'GET'])
-def get_employee(id):
+@app.route('/simple_Linear_edit/<string:id>', methods = ['POST', 'GET'])
+def simple_Linear_edit(id):
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-   
-    cur.execute('SELECT * FROM simple WHERE simpleid = %s', (id))
-    data = cur.fetchall()
+    print(id)
+    # cur.execute('SELECT * FROM simple WHERE simpleid = %s', (id))
+    cur.execute('SELECT * FROM simple WHERE simpleid = %s', (id,))
+    data = cur.fetchone()
     cur.close()
-    print(data[0])
-    return render_template('sLinear_edit.html', sLinear = data[0])
+    print(data)
+    return render_template('sLinear_edit.html', sLinear = data)
 
 
 
-@app.route('/update/<id>', methods=['POST'])
-def update_student(id):
+@app.route('/simple_Linear_update/<string:id>', methods=['POST'])
+def simple_Linear_update(id):
     if request.method == 'POST':
         
-
         request_type_str = request.method
         
         try:
@@ -192,6 +194,7 @@ def update_student(id):
 
             try:
                 conn.commit()
+                cur.close()
             except:
                 return "Forth"
 
