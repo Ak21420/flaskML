@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+
+        <title>Multi Linear - Car Price Predictor</title>
+
+    </head>
+
+    <body>
+        <h1>Your car Predicted Price</h1>
+
+        <form action="/multi_Linear_predict/{{mLinear.multiid}}" method="POST">
+            
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>You have select the company: </label>
+                <input type="text" name="company" value="{{mLinear.company_name}}" class="form-control" readonly="1">
+                <!-- <input name="company"> -->
+                <!-- <select class="selectpicker form-control" id="company" name="company" required="1"
+                                    onchange="load_car_models(this.id,'company')">
+                    {% for company in companies %}
+                        <option value="{{ company }}">{{ company }}</option>
+                    {% endfor %}
+                </select> -->
+                <!-- <h1>{{mLinear.company_name}}</h1> -->
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>You have select the model: </label>
+                <input type="text" name="car_models" value="{{mLinear.car_models}}" class="form-control" readonly="1">
+                <!-- <input name="car_models"> -->
+                <!-- <select class="selectpicker form-control" id="car_models" name="car_models" required="1" >
+                    {% for car_model in car_models %}
+                        <option value="{{ car_model }}">{{ car_model }}</option>
+                    {% endfor %}
+                </select> -->
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>You have select Year of Purchase: </label>
+                <input type="text" name="year" value="{{mLinear.purchase_year}}" class="form-control" readonly="1">
+                <!-- <input name="year"> -->
+                <!-- <select class="selectpicker form-control" id="year" name="year" required="1">
+                    {% for year in years %}
+                    <option value="{{ year }}">{{ year }}</option>
+                    {% endfor %} -->
+                </select>
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>You have select this Fuel Type: </label>
+                <input type="text" name="fuel_type" value="{{mLinear.fuel_type}}" class="form-control" readonly="1">
+                <!-- <input name="fuel_type"> -->
+                <!-- <select class="selectpicker form-control" id="fuel_type" name="fuel_type" required="1">
+                    {% for fuel in fuel_types %}
+                    <option value="{{ fuel }}">{{ fuel }}</option>
+                    {% endfor %} -->
+                </select>
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>You have entered the Kilometres: </label>
+                <input type="text" name="kilo_driven" value="{{mLinear.kilo_driven}}" class="form-control" readonly="1">
+                <!-- <input name="kilo_driven" readonly="1"> -->
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Predicted car Price: </label>
+                <h1>{{mLinear.predict_price}}</h1>
+                <!-- <input type="text" name="predict_price" value="{{mLinear.predict_price}}" class="form-control" readonly="1"> -->
+                <!-- <input name="kilo_driven" readonly="1"> -->
+            </div>
+
+            <!-- <input type="submit"> -->
+
+        </form>
+
+        <br>
+        <br>
+
+        <a href="{{url_for('multi_linear') }}">Go back to Multi linear page</a>  |  <a href="/">Home page</a>  |  <a href="{{url_for('multi_linear_layout') }}">Click Here for view past entries</a>
+
+    </body>
+</html>
+
+
+

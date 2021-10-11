@@ -16,3 +16,4 @@ scipy==1.6.2
 six==1.15.0
 threadpoolctl==2.1.0
 Werkzeug==1.0.1
+flask_cors

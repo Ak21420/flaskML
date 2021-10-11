@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash,Response
 from flask_cors import CORS,cross_origin
 import psycopg2
 import psycopg2.extras
@@ -11,7 +11,7 @@ import plotly.graph_objects as go
 import uuid
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error,mean_squared_error
-from datetime import datetime
+from datetime import date, datetime
 
 
 app = Flask(__name__, static_url_path = "", static_folder = "static", template_folder = "templates")
@@ -119,7 +119,6 @@ def simple_Linear_edit(id):
     return render_template('sLinear_edit.html', sLinear = data)
 
 
-
 @app.route('/simple_Linear_update/<string:id>', methods=['POST'])
 def simple_Linear_update(id):
     if request.method == 'POST':
@@ -162,6 +161,7 @@ def simple_Linear_update(id):
             else:
                 return "Please enter Valid values => " + text
 
+
 def make_picture(training_data_filename, model, new_inp_np_arr, output_file):
     data = pd.read_pickle(training_data_filename)
     ages = data['Age']
@@ -198,70 +198,57 @@ def floats_string_to_np_arr(floats_str):
 @app.route('/multi_linear', methods=['GET', 'POST'])
 @cross_origin()
 def multi_linear():
-    # print("Simple_Linear")
     try:
-        print("First")
-
         model=pickle.load(open('mLinear.pkl','rb'))
-
-        print("Second")
-
         car=pd.read_csv('Cleaned_Car_data.csv')
 
-        print("Third")
-        
         request_type_str = request.method
         
         try:
-            print("forth")
             cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         except:
             return "Second"
 
-        print("Fifth")
-
         if request_type_str == 'GET':
+            old_companies = car['company']
+            old_car_models = car['name']
+
+            d = {}
+
+            for i in range(old_companies.shape[0]):
+                d[old_car_models[i]] = old_companies[i]
+
+            # print(len(d))
+
             companies = sorted(car['company'].unique())
             car_models = sorted(car['name'].unique())
             year = sorted(car['year'].unique(),reverse=True)
             fuel_type = car['fuel_type'].unique()
-            # print(companies)
-            # print(car_models)
-            # print(year)
-            # print(fuel_type)
+
             companies.insert(0,'Select Company')
-            print("Sixth")
-            return render_template('mLinear.html',companies = companies, car_models = car_models, years = year,fuel_types = fuel_type)
+            try:
+                return render_template('mLinear.html',companies=companies,car_models=car_models,years=year,fuel_types=fuel_type, com_model = d)
+            except Exception as e:
+                print(e)
         else:
-            # sepal_length = request.form['sepal_length']
-            # sepal_width = request.form['sepal_width']
-            # petal_length = request.form['petal_length']
-            # petal_width = request.form['petal_width']
-            # mae  = request.form['mae']
-            # mse = request.form['mse']
-            # rmse = request.form['rmse']
-            print("First")
-            company_name=request.form.get('company')
+            company_name=request.form['company']
+            car_model=request.form['car_models']
+            purchase_year=request.form['year']
+            fuel_type=request.form['fuel_type']
+            driven=request.form['kilo_driven']
+            
+            driven_new = float(driven)
+            purchase_year_new = float(purchase_year)
+            try:
+                prediction = model.predict(pd.DataFrame(columns=['name', 'company', 'year', 'kms_driven', 'fuel_type'], data=np.array([car_model,company_name,purchase_year_new,driven_new,fuel_type]).reshape(1, 5)))
+            except Exception as e:
+                print(e)
+            
+            prediction_new = float(prediction)
 
-            car_model=request.form.get('car_models')
-            purchase_year=request.form.get('year')
-            fuel_type=request.form.get('fuel_type')
-            driven=request.form.get('kilo_driven')
-            print("two")
-            
-            prediction = model.predict(pd.DataFrame(columns=['name', 'company', 'year', 'kms_driven', 'fuel_type'],
-                                    data=np.array([car_model,company_name,purchase_year,driven,fuel_type]).reshape(1, 5)))
-            
-            print(prediction)
-
-            
+            # print(type(prediction))
 
             Dtime = datetime.now()
-
-            # 6a0dcc9c03574ae0b563ea938316d37f
-            random_string = uuid.uuid4().hex
-            path = "static/" + random_string + ".svg"
-            # model = load('mLinear.joblib')
 
             # CREATE TABLE multi (
             #     MultiID serial primary key NOT NULL,
@@ -272,12 +259,151 @@ def multi_linear():
             #     kilo_driven float not null,
             #     predict_price float not null,
             #     datetime text not null,
-            #     image text,
             #     is_delete bool
             # );
 
             try:
-                cur.execute("INSERT INTO multi(company_name,car_models,purchase_year,fuel_type,kilo_driven,predict_price,datetime,image,is_delete)VALUES (%s,%s,%d,%s,%f,%f,%s,%s,FALSE)", (company_name,car_model,purchase_year,fuel_type,driven,prediction,Dtime,random_string))
+                cur.execute("INSERT INTO multi(company_name,car_models,purchase_year,fuel_type,kilo_driven,predict_price,datetime,is_delete)VALUES (%s,%s,%s,%s,%s,%s,%s,FALSE)", (company_name,car_model,purchase_year_new,fuel_type,driven_new,prediction_new,Dtime))
+            except Exception as e:
+                print(e)
+
+            try:
+                conn.commit()
+                cur.close()
+            except:
+                return "Forth"
+            
+            try:
+                print(str(np.round(prediction[0],2)))
+
+                cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    
+                cur.execute('SELECT * FROM multi ORDER BY datetime DESC')
+                
+                data = cur.fetchone()
+                cur.close()
+                print(data)
+                request_type_str = request.method
+
+                return render_template('mLinear_pred.html', mLinear = data)
+            except Exception as e:
+                print(e)
+
+    except:
+        return "Connection Fail"
+
+
+# @app.route('/select_company', methods=['POST'])
+# def select_company():
+
+#     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+#     cur.execute('SELECT car_models FROM multi WHERE company_name = %s', (company))
+    
+#     data = cur.fetchall()
+#     cur.close()
+
+#     ret = ''
+#     for entry in data:
+#         ret += '<option value="{}">{}</option>'.format(entry)
+#     return ret
+
+
+@app.route('/multi_linear_layout', methods=['GET', 'POST'])
+def multi_linear_layout():
+    try:
+        request_type_str = request.method
+        
+        try:
+            cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        except:
+            return "Second"
+        
+        s = "SELECT * FROM multi WHERE is_delete='FALSE'"
+
+        try:
+            cur.execute(s)
+        except Exception as e:
+            print(e)
+        list_users = cur.fetchall()
+        cur.close()
+
+        return render_template('mLinear_layout.html', list_users = list_users)
+
+    except Exception as e:
+        print(e)
+
+
+@app.route('/multi_Linear_delete/<string:id>', methods = ['POST','GET'])
+def multi_Linear_delete(id):
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    
+    cur.execute('UPDATE multi SET is_delete = TRUE WHERE multiid = {0}'.format(id))
+    conn.commit()
+    cur.close()
+    
+    return redirect(url_for('multi_linear_layout'))
+
+
+@app.route('/multi_Linear_edit/<string:id>', methods = ['POST', 'GET'])
+def multi_Linear_edit(id):
+    car=pd.read_csv('Cleaned_Car_data.csv')
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    
+    cur.execute('SELECT * FROM multi WHERE multiid = %s', (id,))
+    
+    data = cur.fetchone()
+    cur.close()
+
+    companies = sorted(car['company'].unique())
+    car_models = sorted(car['name'].unique())
+    year = sorted(car['year'].unique(),reverse=True)
+    fuel_type = car['fuel_type'].unique()
+
+    companies.insert(0,'Select Company')
+    
+    # return render_template('mLinear.html',)
+    
+    return render_template('mLinear_edit.html', mLinear = data, companies=companies,car_models=car_models,years=year,fuel_types=fuel_type)
+
+
+@app.route('/multi_Linear_update/<string:id>', methods=['POST'])
+def multi_Linear_update(id):
+    if request.method == 'POST':
+        
+        request_type_str = request.method
+        
+        try:
+            cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        except:
+            return "Second"
+
+        if request_type_str == 'POST':       
+
+            company_name=request.form['company']
+            car_model=request.form['car_models']
+            purchase_year=request.form['year']
+            fuel_type=request.form['fuel_type']
+            driven=request.form['kilo_driven']
+            
+            driven_new = float(driven)
+            purchase_year_new = float(purchase_year)
+                 
+            Dtime = datetime.now()
+
+            model=pickle.load(open('mLinear.pkl','rb'))
+            car=pd.read_csv('Cleaned_Car_data.csv')
+
+            try:
+                prediction = model.predict(pd.DataFrame(columns=['name', 'company', 'year', 'kms_driven', 'fuel_type'], data=np.array([car_model,company_name,purchase_year_new,driven_new,fuel_type]).reshape(1, 5)))
+            except Exception as e:
+                print(e)
+            
+            prediction_new = float(prediction)
+
+            try:
+                # cur.execute("INSERT INTO multi(company_name,car_models,purchase_year,fuel_type,kilo_driven,predict_price,datetime,is_delete)VALUES (%s,%s,%s,%s,%s,%s,%s,FALSE)", (company_name,car_model,purchase_year_new,fuel_type,driven_new,prediction_new,Dtime))
+                cur.execute("UPDATE multi SET company_name = %s, car_models = %s, purchase_year = %s, fuel_type = %s, kilo_driven = %s, predict_price = %s, datetime = %s WHERE multiid = %s", (company_name,car_model,purchase_year_new,fuel_type,driven_new,prediction_new,Dtime,id))
             except:
                 return "Third"
 
@@ -287,13 +413,19 @@ def multi_linear():
             except:
                 return "Forth"
 
-            return str(np.round(prediction[0],2))
+            try:
+                print(str(np.round(prediction[0],2)))
 
-            # if len(np_arr):
-            #     make_picture('AgesAndHeights.pkl', model, np_arr, path)
-            #     return render_template('mLinear.html', href=path)
-            # else:
-            #     return "Please enter Valid values => " + text
+                cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    
+                cur.execute('SELECT * FROM multi ORDER BY datetime DESC')
+                
+                data = cur.fetchone()
+                cur.close()
+                print(data)
+                request_type_str = request.method
 
-    except:
-        return "Connection Fail"
+                return render_template('mLinear_pred.html', mLinear = data)
+            except Exception as e:
+                print(e)
+
