@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+
+        <title>Logistic regression</title>
+
+    </head>
+
+    <body>
+        <h1>Logistic Regression</h1>
+
+        <form action="{{url_for('logistic')}}" method="POST">
+            
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Enter the age: </label>
+                <input name="age">
+            </div>
+
+            <br>
+            <br>
+            
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Enter Expected Salary: </label>
+                <input name="expected_salary">
+            </div>
+
+            <br>
+            <br>
+
+            <input type="submit">
+
+        </form>
+       
+        <br>
+        <br>
+       
+        <a href="/">Go back to Home page</a>  |  <a href="{{url_for('logistic_layout') }}">Click Here for view past entries</a>
+
+
+    </body>
+</html>

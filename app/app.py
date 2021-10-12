@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash,Response
 from flask_cors import CORS,cross_origin
+# from matplotlib import pyplot as plt
 import psycopg2
 import psycopg2.extras
 import numpy as np
@@ -12,6 +13,7 @@ import uuid
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error,mean_squared_error
 from datetime import date, datetime
+from sklearn.preprocessing import StandardScaler
 
 
 app = Flask(__name__, static_url_path = "", static_folder = "static", template_folder = "templates")
@@ -184,15 +186,15 @@ def make_picture(training_data_filename, model, new_inp_np_arr, output_file):
     fig.show()
 
 
-def floats_string_to_np_arr(floats_str):
-    def is_float(s):
-        try:
-            if float(s) >= 0:
-                return True
-        except:
-            return False
-    floats = np.array([float(x) for x in floats_str.split(',') if is_float(x)])
-    return floats.reshape(len(floats), 1)
+# def floats_string_to_np_arr(floats_str):
+#     def is_float(s):
+#         try:
+#             if float(s) >= 0:
+#                 return True
+#         except:
+#             return False
+#     floats = np.array([float(x) for x in floats_str.split(',') if is_float(x)])
+#     return floats.reshape(len(floats), 1)
 
 
 @app.route('/multi_linear', methods=['GET', 'POST'])
@@ -231,11 +233,11 @@ def multi_linear():
             except Exception as e:
                 print(e)
         else:
-            company_name=request.form['company']
-            car_model=request.form['car_models']
-            purchase_year=request.form['year']
-            fuel_type=request.form['fuel_type']
-            driven=request.form['kilo_driven']
+            company_name = request.form['company']
+            car_model = request.form['car_models']
+            purchase_year = request.form['year']
+            fuel_type = request.form['fuel_type']
+            driven = request.form['kilo_driven']
             
             driven_new = float(driven)
             purchase_year_new = float(purchase_year)
@@ -429,3 +431,155 @@ def multi_Linear_update(id):
             except Exception as e:
                 print(e)
 
+
+
+@app.route('/logistic', methods=['GET', 'POST'])
+def logistic():
+    
+    try:
+
+        model = load('logistic.joblib')
+        data_set= pd.read_csv('Social_Network_Ads.csv') 
+
+        request_type_str = request.method
+        
+        try:
+            cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        except:
+            return "Second"
+        
+        if request_type_str == 'GET':
+            return render_template('logistic.html')
+        else:
+
+            x= data_set.iloc[:, [0,1]].values
+            y= data_set.iloc[:, 2].values
+
+            age = request.form['age']
+            expected_salary = request.form['expected_salary']
+
+            Dtime = datetime.now()
+
+            # model = load('logistic.joblib')
+
+            # CREATE TABLE logistic (
+            #     LogisticID serial primary key NOT NULL,
+            #     age text not null ,
+            #     expected_salary text not null ,
+            #     predicted_value text not null ,
+            #     datetime text not null,
+            #     image text not null,
+            #     is_delete bool
+            # );
+
+            st_x = StandardScaler()
+
+            st_x.fit(x)
+            st_x.transform(x)
+
+
+            if age:
+                age = floats_string_to_np_arr(age) 
+            else:
+                return "Please enter value"
+            
+            if expected_salary:
+                expected_salary = floats_string_to_np_arr(expected_salary) 
+            else:
+                return "Please enter value"
+
+
+            x_real = np.array([age,expected_salary]).reshape(1, -1)
+            print(x_real)
+            # st_x = StandardScaler()
+
+            print(age)
+            print(expected_salary)
+            # st_model_new = st_x.fit(x_real)
+            x_real_process = st_x.transform(x_real)  
+
+            print(x_real_process) 
+
+            try:
+                prediction = model.predict(pd.DataFrame(columns=['age', 'expected_salary'], data=x_real_process))
+            except Exception as e:
+                print(e)
+
+            print(prediction)
+
+
+            try:
+                cur.execute("INSERT INTO logistic(age,expected_salary,predicted_value,datetime,is_delete) VALUES (%s,%s,%s,%s,FALSE)", (str(int(age[0][0])),str(int(expected_salary[0][0])),str(prediction[0]),Dtime))
+            except Exception as e:
+                print(e)
+
+            try:
+                conn.commit()
+                cur.close()
+            except:
+                return "Forth"
+
+            if len(age) & len(expected_salary):
+                
+                cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    
+                cur.execute('SELECT * FROM logistic ORDER BY datetime DESC')
+                
+                data = cur.fetchone()
+                cur.close()
+                print(data)
+                request_type_str = request.method
+
+                return render_template('logistic_pred.html', logistic = data)
+            else:
+                return "Please enter Valid values"
+
+    except:
+        return "Connection Fail"
+
+
+def floats_string_to_np_arr(floats_str):
+    def is_float(s):
+        try:
+            if float(s) >= 0:
+                return True
+        except:
+            return False
+    floats = np.array([float(x) for x in floats_str.split(',') if is_float(x)])
+    return floats.reshape(len(floats), 1)
+
+
+@app.route('/logistic_layout', methods=['GET', 'POST'])
+def logistic_layout():
+    try:
+        request_type_str = request.method
+        
+        try:
+            cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        except:
+            return "Second"
+        
+        s = "SELECT * FROM logistic WHERE is_delete='FALSE'"
+
+        try:
+            cur.execute(s)
+        except Exception as e:
+            print(e)
+        list_users = cur.fetchall()
+        cur.close()
+
+        return render_template('logistic_layout.html', list_users = list_users)
+
+    except Exception as e:
+        print(e)
+
+
+@app.route('/logistic_delete/<string:id>', methods = ['POST','GET'])
+def logistic_delete(id):
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    
+    cur.execute('UPDATE logistic SET is_delete = TRUE WHERE logisticid = {0}'.format(id))
+    conn.commit()
+    cur.close()
+    
+    return redirect(url_for('logistic_layout'))

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+
+        <title>Logistic regression</title>
+
+    </head>
+
+    <body>
+        <h1>Logistic Regression Predicted Price</h1>
+
+        <form action="/logistic_predict/{{logistic.logisticid}}" method="POST">
+            
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>You have entered the age: </label>
+                <input name="age" value="{{logistic.age}}" readonly="1">
+            </div>
+
+            <br>
+            <br>
+            
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>You have entered the Expected Salary: </label>
+                <input name="expected_salary" value="{{logistic.expected_salary}}" readonly="1">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>The user will Purchase: </label>
+
+                {% if logistic.predicted_value == '1' %}
+                    <input name="purchase" value="Yes" readonly="1">
+                {% else %}
+                    <input name="purchase" value="No" readonly="1">
+                {% endif %}
+
+            </div>
+
+        </form>
+
+        <br>
+        <br>
+
+        <a href="{{url_for('logistic') }}">Go back to Logistic Regression page</a>  |  <a href="/">Home page</a>  |  <a href="{{url_for('logistic_layout') }}">Click Here for view past entries</a>
+
+    </body>
+</html>
+
+
+
