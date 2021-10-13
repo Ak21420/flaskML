@@ -14,7 +14,7 @@
             petal_length = request.form['petal_length']
             petal_width = request.form['petal_width'] -->
 
-        <form action="{{url_for('knn')}}" method="POST">
+        <form action="{{url_for('knn_algo.knn')}}" method="POST">
             
             <div class="col-md-10 form-group" style="text-align: center"></div>
                 <label>Enter the Sepal Length: </label>
@@ -55,7 +55,7 @@
         <br>
         <br>
        
-        <a href="/">Go back to Home page</a>  |  <a href="{{url_for('knn_layout') }}">Click Here for view past entries</a>
+        <a href="/">Go back to Home page</a>  |  <a href="{{url_for('knn_algo.knn_layout') }}">Click Here for view past entries</a>
 
 
     </body>

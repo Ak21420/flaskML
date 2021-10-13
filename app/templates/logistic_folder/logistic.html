@@ -9,7 +9,7 @@
     <body>
         <h1>Logistic Regression</h1>
 
-        <form action="{{url_for('logistic')}}" method="POST">
+        <form action="{{url_for('logistic_algo.logistic')}}" method="POST">
             
             <div class="col-md-10 form-group" style="text-align: center"></div>
                 <label>Enter the age: </label>
@@ -34,7 +34,7 @@
         <br>
         <br>
        
-        <a href="/">Go back to Home page</a>  |  <a href="{{url_for('logistic_layout') }}">Click Here for view past entries</a>
+        <a href="/">Go back to Home page</a>  |  <a href="{{url_for('logistic_algo.logistic_layout') }}">Click Here for view past entries</a>
 
 
     </body>

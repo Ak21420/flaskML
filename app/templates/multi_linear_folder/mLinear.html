@@ -9,7 +9,7 @@
     <body>
         <h1>Multi Linear</h1>
 
-        <form action="{{url_for('multi_linear')}}" method="POST">
+        <form action="{{url_for('mLinear.multi_linear')}}" method="POST">
             
             <div class="col-md-10 form-group" style="text-align: center"></div>
                 <label>Select the company: </label>
@@ -87,7 +87,7 @@
         <br>
         <br>
        
-        <a href="/">Go back to Home page</a>  |  <a href="{{url_for('multi_linear_layout') }}">Click Here for view past entries</a>
+        <a href="/">Go back to Home page</a>  |  <a href="{{url_for('mLinear.multi_linear_layout') }}">Click Here for view past entries</a>
 
     <script>
         function load_car_models(company_id,car_model_id)
