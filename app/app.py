@@ -42,7 +42,7 @@ def simple_linear():
             return "Second"
         
         if request_type_str == 'GET':
-            return render_template('sLinear.html')
+            return render_template('simple_linear_folder/sLinear.html')
         else:
             text = request.form['text']
 
@@ -70,7 +70,7 @@ def simple_linear():
 
             if len(np_arr):
                 make_picture('AgesAndHeights.pkl', model, np_arr, path)
-                return render_template('sLinear.html', href=path)
+                return render_template('simple_linear_folder/sLinear.html', href=path)
             else:
                 return "Please enter Valid values => " + text
     except:
@@ -89,7 +89,7 @@ def simple_linear_layout():
         list_users = cur.fetchall()
         cur.close()
 
-        return render_template('sLinear_layout.html', list_users = list_users)
+        return render_template('simple_linear_folder/sLinear_layout.html', list_users = list_users)
     except:
         return "Connection Fail"
 
@@ -116,7 +116,7 @@ def simple_Linear_edit(id):
         data = cur.fetchone()
         cur.close()
         
-        return render_template('sLinear_edit.html', sLinear = data)
+        return render_template('simple_linear_folder/sLinear_edit.html', sLinear = data)
     except:
         return "Connection Fail"
 
@@ -214,7 +214,7 @@ def multi_linear():
 
             companies.insert(0,'Select Company')
             try:
-                return render_template('mLinear.html',companies=companies,car_models=car_models,years=year,fuel_types=fuel_type, com_model = d)
+                return render_template('multi_linear_folder/mLinear.html',companies=companies,car_models=car_models,years=year,fuel_types=fuel_type, com_model = d)
             except Exception as e:
                 print(e)
         else:
@@ -281,7 +281,7 @@ def multi_linear():
 
                 data['predict_price'] = round(data['predict_price'],2)
 
-                return render_template('mLinear_pred.html', mLinear = data)
+                return render_template('multi_linear_folder/mLinear_pred.html', mLinear = data)
             except Exception as e:
                 print(e)
 
@@ -305,7 +305,7 @@ def multi_linear_layout():
         list_users = cur.fetchall()
         cur.close()
 
-        return render_template('mLinear_layout.html', list_users = list_users)
+        return render_template('multi_linear_folder/mLinear_layout.html', list_users = list_users)
     except Exception as e:
         print(e)
 
@@ -341,7 +341,7 @@ def multi_Linear_edit(id):
 
         companies.insert(0,'Select Company')
         
-        return render_template('mLinear_edit.html', mLinear = data, companies=companies,car_models=car_models,years=year,fuel_types=fuel_type)
+        return render_template('multi_linear_folder/mLinear_edit.html', mLinear = data, companies=companies,car_models=car_models,years=year,fuel_types=fuel_type)
     except:
         return "Connection Fail"
 
@@ -409,7 +409,7 @@ def multi_Linear_update(id):
 
                 data['predict_price'] = round(data['predict_price'],2)
 
-                return render_template('mLinear_pred.html', mLinear = data)
+                return render_template('multi_linear_folder/mLinear_pred.html', mLinear = data)
             except Exception as e:
                 print(e)
 
@@ -428,7 +428,7 @@ def logistic():
             return "Second"
         
         if request_type_str == 'GET':
-            return render_template('logistic.html')
+            return render_template('logistic_folder/logistic.html')
         else:
             x= data_set.iloc[:, [0,1]].values
             y= data_set.iloc[:, 2].values
@@ -508,7 +508,7 @@ def logistic():
                 print(data)
                 request_type_str = request.method
 
-                return render_template('logistic_pred.html', logistic = data)
+                return render_template('logistic_folder/logistic_pred.html', logistic = data)
             else:
                 return "Please enter Valid values"
     except:
@@ -531,7 +531,7 @@ def logistic_layout():
         list_users = cur.fetchall()
         cur.close()
 
-        return render_template('logistic_layout.html', list_users = list_users)
+        return render_template('logistic_folder/logistic_layout.html', list_users = list_users)
     except Exception as e:
         print(e)
 
@@ -559,7 +559,7 @@ def logistic_edit(id):
         data = cur.fetchone()
         cur.close()
 
-        return render_template('logistic_edit.html', logistic = data)
+        return render_template('logistic_folder/logistic_edit.html', logistic = data)
     except:
         return "Connection Fail"
 
@@ -646,7 +646,7 @@ def logistic_update(id):
                 print(data)
                 request_type_str = request.method
 
-                return render_template('logistic_pred.html', logistic = data)
+                return render_template('logistic_folder/logistic_pred.html', logistic = data)
             else:
                 return "Please enter Valid values"
 
@@ -665,7 +665,7 @@ def knn():
             return "Second"
         
         if request_type_str == 'GET':
-            return render_template('knn.html')
+            return render_template('knn_folder/knn.html')
         else:
             x= data_set.iloc[:, 0:-1].values
             y= data_set.iloc[:, -1].values
@@ -746,7 +746,7 @@ def knn():
                 print(data)
                 request_type_str = request.method
 
-                return render_template('knn_pred.html', knn = data)
+                return render_template('knn_folder/knn_pred.html', knn = data)
             else:
                 return "Please enter Valid values"
     except Exception as e:
@@ -770,7 +770,7 @@ def knn_layout():
         list_users = cur.fetchall()
         cur.close()
 
-        return render_template('knn_layout.html', list_users = list_users)
+        return render_template('knn_folder/knn_layout.html', list_users = list_users)
     except Exception as e:
         print(e)
 
@@ -798,7 +798,7 @@ def knn_edit(id):
         data = cur.fetchone()
         cur.close()
 
-        return render_template('knn_edit.html', knn = data)
+        return render_template('knn_folder/knn_edit.html', knn = data)
     except:
         return "Connection Fail"
 
@@ -884,7 +884,7 @@ def knn_update(id):
                 print(data)
                 request_type_str = request.method
 
-                return render_template('knn_pred.html', knn = data)
+                return render_template('knn_folder/knn_pred.html', knn = data)
             else:
                 return "Please enter Valid values"
 
