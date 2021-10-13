@@ -1,6 +1,7 @@
+import re
 from flask import Flask, render_template, request, redirect, url_for, flash,Response
 from flask_cors import CORS,cross_origin
-# from matplotlib import pyplot as plt
+from numpy.lib.function_base import append
 import psycopg2
 import psycopg2.extras
 import numpy as np
@@ -10,8 +11,6 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import uuid
-from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_absolute_error,mean_squared_error
 from datetime import date, datetime
 from sklearn.preprocessing import StandardScaler
 
@@ -24,12 +23,13 @@ DB_NAME = "mlModels"
 DB_USER = "admin"
 DB_PASS = "admin"
 
+conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST)
+
 
 @app.route('/')
 def home():
    return render_template('index.html')
 
-conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST)
 
 @app.route('/simple_linear', methods=['GET', 'POST'])
 def simple_linear():
@@ -73,16 +73,12 @@ def simple_linear():
                 return render_template('sLinear.html', href=path)
             else:
                 return "Please enter Valid values => " + text
-
     except:
         return "Connection Fail"
-
 
 @app.route('/simple_linear_layout', methods=['GET', 'POST'])
 def simple_linear_layout():
     try:
-        request_type_str = request.method
-        
         try:
             cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         except:
@@ -94,36 +90,39 @@ def simple_linear_layout():
         cur.close()
 
         return render_template('sLinear_layout.html', list_users = list_users)
-
     except:
         return "Connection Fail"
 
 @app.route('/simple_Linear_delete/<string:id>', methods = ['POST','GET'])
 def simple_Linear_delete(id):
-    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    
-    cur.execute('UPDATE simple SET is_delete = TRUE WHERE simpleid = {0}'.format(id))
-    conn.commit()
-    cur.close()
-    
-    return redirect(url_for('simple_linear_layout'))
+    try:
+        cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        
+        cur.execute('UPDATE simple SET is_delete = TRUE WHERE simpleid = {0}'.format(id))
+        conn.commit()
+        cur.close()
+        
+        return redirect(url_for('simple_linear_layout'))
+    except:
+        return "Connection Fail"
 
 @app.route('/simple_Linear_edit/<string:id>', methods = ['POST', 'GET'])
 def simple_Linear_edit(id):
-    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    
-    cur.execute('SELECT * FROM simple WHERE simpleid = %s', (id,))
-    
-    data = cur.fetchone()
-    cur.close()
-    
-    return render_template('sLinear_edit.html', sLinear = data)
-
+    try:
+        cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        
+        cur.execute('SELECT * FROM simple WHERE simpleid = %s', (id,))
+        
+        data = cur.fetchone()
+        cur.close()
+        
+        return render_template('sLinear_edit.html', sLinear = data)
+    except:
+        return "Connection Fail"
 
 @app.route('/simple_Linear_update/<string:id>', methods=['POST'])
 def simple_Linear_update(id):
     if request.method == 'POST':
-        
         request_type_str = request.method
         
         try:
@@ -185,7 +184,6 @@ def make_picture(training_data_filename, model, new_inp_np_arr, output_file):
     fig.show()
 
 
-
 @app.route('/multi_linear', methods=['GET', 'POST'])
 @cross_origin()
 def multi_linear():
@@ -225,9 +223,19 @@ def multi_linear():
             purchase_year = request.form['year']
             fuel_type = request.form['fuel_type']
             driven = request.form['kilo_driven']
-            
-            driven_new = float(driven)
+                      
             purchase_year_new = float(purchase_year)
+
+            a_list = []
+            if driven:
+                a_list.append(driven)
+                st = check_values(a_list)
+
+                if st=="Success":
+                    driven_new = float(driven)
+                else:
+                    return "Write Posible values"
+            
             try:
                 prediction = model.predict(pd.DataFrame(columns=['name', 'company', 'year', 'kms_driven', 'fuel_type'], data=np.array([car_model,company_name,purchase_year_new,driven_new,fuel_type]).reshape(1, 5)))
             except Exception as e:
@@ -247,6 +255,8 @@ def multi_linear():
             #     datetime text not null,
             #     is_delete bool
             # );
+
+            prediction_new = round(prediction_new,2)
 
             try:
                 cur.execute("INSERT INTO multi(company_name,car_models,purchase_year,fuel_type,kilo_driven,predict_price,datetime,is_delete)VALUES (%s,%s,%s,%s,%s,%s,%s,FALSE)", (company_name,car_model,purchase_year_new,fuel_type,driven_new,prediction_new,Dtime))
@@ -268,8 +278,8 @@ def multi_linear():
                 
                 data = cur.fetchone()
                 cur.close()
-                print(data)
-                request_type_str = request.method
+
+                data['predict_price'] = round(data['predict_price'],2)
 
                 return render_template('mLinear_pred.html', mLinear = data)
             except Exception as e:
@@ -280,9 +290,7 @@ def multi_linear():
 
 @app.route('/multi_linear_layout', methods=['GET', 'POST'])
 def multi_linear_layout():
-    try:
-        request_type_str = request.method
-        
+    try:      
         try:
             cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         except:
@@ -298,46 +306,48 @@ def multi_linear_layout():
         cur.close()
 
         return render_template('mLinear_layout.html', list_users = list_users)
-
     except Exception as e:
         print(e)
 
 
 @app.route('/multi_Linear_delete/<string:id>', methods = ['POST','GET'])
 def multi_Linear_delete(id):
-    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    
-    cur.execute('UPDATE multi SET is_delete = TRUE WHERE multiid = {0}'.format(id))
-    conn.commit()
-    cur.close()
-    
-    return redirect(url_for('multi_linear_layout'))
-
+    try:
+        cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        
+        cur.execute('UPDATE multi SET is_delete = TRUE WHERE multiid = {0}'.format(id))
+        conn.commit()
+        cur.close()
+        
+        return redirect(url_for('multi_linear_layout'))
+    except:
+        return "Connection Fail"
 
 @app.route('/multi_Linear_edit/<string:id>', methods = ['POST', 'GET'])
 def multi_Linear_edit(id):
-    car=pd.read_csv('Cleaned_Car_data.csv')
-    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    
-    cur.execute('SELECT * FROM multi WHERE multiid = %s', (id,))
-    
-    data = cur.fetchone()
-    cur.close()
+    try:
+        car=pd.read_csv('Cleaned_Car_data.csv')
+        cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        
+        cur.execute('SELECT * FROM multi WHERE multiid = %s', (id,))
+        
+        data = cur.fetchone()
+        cur.close()
 
-    companies = sorted(car['company'].unique())
-    car_models = sorted(car['name'].unique())
-    year = sorted(car['year'].unique(),reverse=True)
-    fuel_type = car['fuel_type'].unique()
+        companies = sorted(car['company'].unique())
+        car_models = sorted(car['name'].unique())
+        year = sorted(car['year'].unique(),reverse=True)
+        fuel_type = car['fuel_type'].unique()
 
-    companies.insert(0,'Select Company')
-    
-    return render_template('mLinear_edit.html', mLinear = data, companies=companies,car_models=car_models,years=year,fuel_types=fuel_type)
-
+        companies.insert(0,'Select Company')
+        
+        return render_template('mLinear_edit.html', mLinear = data, companies=companies,car_models=car_models,years=year,fuel_types=fuel_type)
+    except:
+        return "Connection Fail"
 
 @app.route('/multi_Linear_update/<string:id>', methods=['POST'])
 def multi_Linear_update(id):
     if request.method == 'POST':
-        
         request_type_str = request.method
         
         try:
@@ -345,16 +355,24 @@ def multi_Linear_update(id):
         except:
             return "Second"
 
-        if request_type_str == 'POST':       
-
+        if request_type_str == 'POST':
             company_name=request.form['company']
             car_model=request.form['car_models']
             purchase_year=request.form['year']
             fuel_type=request.form['fuel_type']
             driven=request.form['kilo_driven']
             
-            driven_new = float(driven)
             purchase_year_new = float(purchase_year)
+
+            a_list = []
+            if driven:
+                a_list.append(driven)
+                st = check_values(a_list)
+
+                if st=="Success":
+                    driven_new = float(driven)
+                else:
+                    return "Write Posible values"
                  
             Dtime = datetime.now()
 
@@ -366,7 +384,7 @@ def multi_Linear_update(id):
             except Exception as e:
                 print(e)
             
-            prediction_new = float(prediction)
+            prediction_new = round(float(prediction),2)
 
             try:
                 cur.execute("UPDATE multi SET company_name = %s, car_models = %s, purchase_year = %s, fuel_type = %s, kilo_driven = %s, predict_price = %s, datetime = %s WHERE multiid = %s", (company_name,car_model,purchase_year_new,fuel_type,driven_new,prediction_new,Dtime,id))
@@ -388,21 +406,17 @@ def multi_Linear_update(id):
                 
                 data = cur.fetchone()
                 cur.close()
-                print(data)
-                request_type_str = request.method
+
+                data['predict_price'] = round(data['predict_price'],2)
 
                 return render_template('mLinear_pred.html', mLinear = data)
             except Exception as e:
                 print(e)
 
 
-
-
 @app.route('/logistic', methods=['GET', 'POST'])
-def logistic():
-    
+def logistic():   
     try:
-
         model = load('logistic.joblib')
         data_set= pd.read_csv('Social_Network_Ads.csv') 
 
@@ -416,12 +430,27 @@ def logistic():
         if request_type_str == 'GET':
             return render_template('logistic.html')
         else:
-
             x= data_set.iloc[:, [0,1]].values
             y= data_set.iloc[:, 2].values
 
             age = request.form['age']
             expected_salary = request.form['expected_salary']
+            
+            ar = [] 
+
+            ar.append(age)
+            ar.append(expected_salary)
+
+            if ar:
+                st = check_values(ar)
+
+                if st=="Success":
+                    pass
+                else:
+                    return "Write Posible values"
+
+                if age > 100:
+                    return "Write Posible values"
 
             Dtime = datetime.now()
 
@@ -439,7 +468,6 @@ def logistic():
             st_x.fit(x)
             st_x.transform(x)
 
-
             if age:
                 age = floats_string_to_np_arr(age) 
             else:
@@ -450,9 +478,7 @@ def logistic():
             else:
                 return "Please enter value"
 
-
             x_real = np.array([age,expected_salary]).reshape(1, -1)
-
             x_real_process = st_x.transform(x_real)  
 
             try:
@@ -485,15 +511,12 @@ def logistic():
                 return render_template('logistic_pred.html', logistic = data)
             else:
                 return "Please enter Valid values"
-
     except:
         return "Connection Fail"
 
 @app.route('/logistic_layout', methods=['GET', 'POST'])
 def logistic_layout():
-    try:
-        request_type_str = request.method
-        
+    try: 
         try:
             cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         except:
@@ -509,38 +532,40 @@ def logistic_layout():
         cur.close()
 
         return render_template('logistic_layout.html', list_users = list_users)
-
     except Exception as e:
         print(e)
 
 
 @app.route('/logistic_delete/<string:id>', methods = ['POST','GET'])
 def logistic_delete(id):
-    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    
-    cur.execute('UPDATE logistic SET is_delete = TRUE WHERE logisticid = {0}'.format(id))
-    conn.commit()
-    cur.close()
-    
-    return redirect(url_for('logistic_layout'))
-
+    try:
+        cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        
+        cur.execute('UPDATE logistic SET is_delete = TRUE WHERE logisticid = {0}'.format(id))
+        conn.commit()
+        cur.close()
+        
+        return redirect(url_for('logistic_layout'))
+    except:
+        return "Connection Fail"
 
 @app.route('/logistic_edit/<string:id>', methods = ['POST', 'GET'])
 def logistic_edit(id):
-    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    
-    cur.execute('SELECT * FROM logistic WHERE logisticid = %s', (id,))
-    
-    data = cur.fetchone()
-    cur.close()
+    try:
+        cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        
+        cur.execute('SELECT * FROM logistic WHERE logisticid = %s', (id,))
+        
+        data = cur.fetchone()
+        cur.close()
 
-    return render_template('logistic_edit.html', logistic = data)
-
+        return render_template('logistic_edit.html', logistic = data)
+    except:
+        return "Connection Fail"
 
 @app.route('/logistic_update/<string:id>', methods=['POST'])
 def logistic_update(id):
-    if request.method == 'POST':
-        
+    if request.method == 'POST':  
         request_type_str = request.method
         
         try:
@@ -557,6 +582,22 @@ def logistic_update(id):
 
             age = request.form['age']
             expected_salary = request.form['expected_salary']
+
+            ar = [] 
+
+            ar.append(age)
+            ar.append(expected_salary)
+
+            if ar:
+                st = check_values(ar)
+
+                if st=="Success":
+                    pass
+                else:
+                    return "Write Posible values"
+
+                if age > 100:
+                    return "Write Posible values"
 
             Dtime = datetime.now()
 
@@ -610,11 +651,8 @@ def logistic_update(id):
                 return "Please enter Valid values"
 
 
-
-
 @app.route('/knn', methods=['GET', 'POST'])
-def knn():
-    
+def knn():  
     try:
         model = load('Knn.joblib')
         data_set= pd.read_csv('iris.csv') 
@@ -643,6 +681,14 @@ def knn():
             ar.append(sepal_width)
             ar.append(petal_length)
             ar.append(petal_width)
+
+            if ar:
+                st = check_values(ar)
+
+                if st=="Success":
+                    pass
+                else:
+                    return "Write Posible values"
 
             Dtime = datetime.now()
 
@@ -703,7 +749,6 @@ def knn():
                 return render_template('knn_pred.html', knn = data)
             else:
                 return "Please enter Valid values"
-
     except Exception as e:
         print(e)
 
@@ -711,8 +756,6 @@ def knn():
 @app.route('/knn_layout', methods=['GET', 'POST'])
 def knn_layout():
     try:
-        request_type_str = request.method
-        
         try:
             cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         except:
@@ -728,38 +771,40 @@ def knn_layout():
         cur.close()
 
         return render_template('knn_layout.html', list_users = list_users)
-
     except Exception as e:
         print(e)
 
 
 @app.route('/knn_delete/<string:id>', methods = ['POST','GET'])
 def knn_delete(id):
-    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    
-    cur.execute('UPDATE knn SET is_delete = TRUE WHERE knnid = {0}'.format(id))
-    conn.commit()
-    cur.close()
-    
-    return redirect(url_for('knn_layout'))
-
+    try:
+        cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        
+        cur.execute('UPDATE knn SET is_delete = TRUE WHERE knnid = {0}'.format(id))
+        conn.commit()
+        cur.close()
+        
+        return redirect(url_for('knn_layout'))
+    except:
+        return "Connection Fail"
 
 @app.route('/knn_edit/<string:id>', methods = ['POST', 'GET'])
 def knn_edit(id):
-    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    
-    cur.execute('SELECT * FROM knn WHERE knnid = %s', (id,))
-    
-    data = cur.fetchone()
-    cur.close()
+    try:
+        cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        
+        cur.execute('SELECT * FROM knn WHERE knnid = %s', (id,))
+        
+        data = cur.fetchone()
+        cur.close()
 
-    return render_template('knn_edit.html', knn = data)
-
+        return render_template('knn_edit.html', knn = data)
+    except:
+        return "Connection Fail"
 
 @app.route('/knn_update/<string:id>', methods=['POST'])
 def knn_update(id):
-    if request.method == 'POST':
-        
+    if request.method == 'POST':      
         request_type_str = request.method
         
         try:
@@ -785,6 +830,14 @@ def knn_update(id):
             ar.append(sepal_width)
             ar.append(petal_length)
             ar.append(petal_width)
+
+            if ar:
+                st = check_values(ar)
+
+                if st=="Success":
+                    pass
+                else:
+                    return "Write Posible values"
 
             Dtime = datetime.now()
     
@@ -836,9 +889,7 @@ def knn_update(id):
                 return "Please enter Valid values"
 
 
-
 def floats_string_to_np_arr(floats_str):
-    # print(floats_str)
     def is_float(s):
         try:
             if float(s) >= 0:
@@ -846,14 +897,18 @@ def floats_string_to_np_arr(floats_str):
         except:
             return False
 
-    # floats = []
-    # for i in floats_str:
-    #     print(i)
-    #     if float(i):
-    #         is_float(i)
-    #         floats.append(i)
-
-    # floats_arr = np.array(floats)
-    # print(floats_arr)
     floats = np.array([float(x) for x in floats_str.split(',') if is_float(x)])
     return floats.reshape(len(floats), 1)
+
+def check_values(values_array):
+    ar = []
+    for i in values_array:
+        if float(i):
+            if float(i)>=0:
+                pass
+            else:
+                return "Fail"
+        else:
+            return "Fail"
+
+    return "Success"

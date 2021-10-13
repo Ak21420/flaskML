@@ -23,18 +23,7 @@
 
             <br>
             <br>
-
-            <!-- <div class="col-md-10 form-group" style="text-align: center"></div>
-                <label>The user will Purchase: </label>
-
-                {% if logistic.predicted_value == '1' %}
-                    <input name="purchase" value="Yes" required="1">
-                {% else %}
-                    <input name="purchase" value="No" required="1">
-                {% endif %}
-
-            </div> -->
-
+            
             <div class="form-group">
                 <button type="submit" class="btn btn-primary btn-block">
                 Update
@@ -46,8 +35,7 @@
         <br>
         <br>
 
-                <a href="{{url_for('logistic') }}">Go back to Logistic Regression page</a> | <a href="/">Home page</a>
-            
+        <a href="{{url_for('logistic') }}">Go back to Logistic Regression page</a> | <a href="/">Home page</a>  |  <a href="{{url_for('logistic_layout') }}">Go back to Logistic Regression past data page</a>
             
     </body>
 </html>
