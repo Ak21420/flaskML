@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+
+        <title>KNN Classification</title>
+
+    </head>
+
+    <body>
+        <h1>KNN Classification</h1>
+
+        <!-- sepal_length = request.form['sepal_length']
+            sepal_width = request.form['sepal_width']
+            petal_length = request.form['petal_length']
+            petal_width = request.form['petal_width'] -->
+
+        <form action="{{url_for('knn')}}" method="POST">
+            
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Enter the Sepal Length: </label>
+                <input name="sepal_length">
+            </div>
+
+            <br>
+            <br>
+            
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Enter the Sepal Width: </label>
+                <input name="sepal_width">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Enter the Petal Length: </label>
+                <input name="petal_length">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Enter the Petal Width: </label>
+                <input name="petal_width">
+            </div>
+
+            <br>
+            <br>
+
+            <input type="submit">
+
+        </form>
+       
+        <br>
+        <br>
+       
+        <a href="/">Go back to Home page</a>  |  <a href="{{url_for('knn_layout') }}">Click Here for view past entries</a>
+
+
+    </body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+
+        <title>KNN Classification</title>
+
+    </head>
+
+    <body>
+        <h1>KNN Classification Predicted Species</h1>
+
+        <form action="/knn_predict/{{knn.knnid}}" method="POST">
+            
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>You have entered the Sepal Length: </label>
+                <input name="sepal_length" value="{{knn.sepal_length}}" readonly="1">
+            </div>
+
+            <br>
+            <br>
+            
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>You have entered the Sepal Width: </label>
+                <input name="sepal_width" value="{{knn.sepal_width}}" readonly="1">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>You have entered the Petal Length: </label>
+                <input name="petal_length" value="{{knn.petal_length}}" readonly="1">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>You have entered the Petal Width: </label>
+                <input name="petal_width" value="{{knn.petal_width}}" readonly="1">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>The Species looks like: </label>
+                <input name="predicted_value" value="{{knn.predicted_value}}" readonly="1">
+            </div>
+
+        </form>
+
+        <br>
+        <br>
+
+        <a href="{{url_for('knn') }}">Go back to KNN Classification page</a>  |  <a href="/">Home page</a>  |  <a href="{{url_for('knn_layout') }}">Click Here for view past entries</a>
+
+    </body>
+</html>
+
+
+

@@ -2,117 +2,51 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Multi Linear Algorithm Edit data</title>
+        <title>Logistic Regression Algorithm Edit data</title>
     </head>
     <body>
-        
-
-                <form action="/multi_Linear_update/{{mLinear.multiid}}" method="POST">
+        <form action="/logistic_update/{{logistic.logisticid}}" method="POST">
             
-                    <div class="col-md-10 form-group" style="text-align: center"></div>
-                        <label>You have select the company: </label>
-                        <!-- <input type="text" name="company" value="{{mLinear.company_name}}" class="form-control" readonly="1"> -->
-                        <!-- <input name="company"> -->
-                        <select class="selectpicker form-control" id="company" name="company" required="1"
-                                            onchange="load_car_models(this.id,'company')">
-                            <!-- <option value="{{ company }}">{{ company }}</option> -->
-                            {% for company in companies %}
-                                
-                                {% if company == mLinear.company_name %}
-                                    <option value="{{ company }}" selected>{{ company }}</option>
-                                {% else %}
-                                    <option value="{{ company }}">{{ company }}</option>
-                                {% endif %}
+    
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Enter your Age: </label>
+                <input name="age" value="{{logistic.age}}" required="1">
+            </div>
+
+            <br>
+            <br>
             
-                            {% endfor %}
-                        </select>
-                        <!-- <h1>{{mLinear.company_name}}</h1> -->
-                    </div>
-        
-                    <br>
-                    <br>
-        
-                    <div class="col-md-10 form-group" style="text-align: center"></div>
-                        <label>You have select the model: </label>
-                        <!-- <input type="text" name="car_models" value="{{mLinear.car_models}}" class="form-control" readonly="1"> -->
-                        <!-- <input name="car_models"> -->
-                        <select class="selectpicker form-control" id="car_models" name="car_models" required="1"  value="{{mLinear.car_models}}" >
-                            {% for car_model in car_models %}
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Enter the Expected Salary: </label>
+                <input name="expected_salary" value="{{logistic.expected_salary}}" required="1">
+            </div>
 
-                                {% if car_model == mLinear.car_models %}
-                                    <option value="{{ car_model }}" selected>{{ car_model }}</option>
-                                {% else %}
-                                    <option value="{{ car_model }}">{{ car_model }}</option>
-                                {% endif %}
-                                
-                            {% endfor %}
-                        </select>
-                    </div>
-        
-                    <br>
-                    <br>
-        
-                    <div class="col-md-10 form-group" style="text-align: center"></div>
-                        <label>You have select Year of Purchase: </label>
-                        <!-- <input type="text" name="year" value="{{mLinear.purchase_year}}" class="form-control" readonly="1"> -->
-                        <!-- <input name="year"> -->
-                        <select class="selectpicker form-control" id="year" name="year" required="1" value="{{mLinear.purchase_year}}">
-                            {% for year in years %}
+            <br>
+            <br>
 
-                                {% if year == mLinear.purchase_year %}
-                                    <option value="{{ year }}" selected>{{ year }}</option>
-                                {% else %}
-                                    <option value="{{ year }}">{{ year }}</option>
-                                {% endif %}
-                            
-                            {% endfor %}
-                        </select>
-                    </div>
-        
-                    <br>
-                    <br>
-        
-                    <div class="col-md-10 form-group" style="text-align: center"></div>
-                        <label>You have select this Fuel Type: </label>
-                        <!-- <input type="text" name="fuel_type" value="{{mLinear.fuel_type}}" class="form-control" readonly="1"> -->
-                        <!-- <input name="fuel_type"> -->
-                        <select class="selectpicker form-control" id="fuel_type" name="fuel_type" required="1" value="{{mLinear.fuel_type}}">
-                            {% for fuel in fuel_types %}
+            <!-- <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>The user will Purchase: </label>
 
-                                {% if fuel == mLinear.fuel_type %}
-                                    <option value="{{ fuel }}" selected>{{ fuel }}</option>
-                                {% else %}
-                                    <option value="{{ fuel }}">{{ fuel }}</option>
-                                {% endif %}
-                            
-                            {% endfor %}
-                        </select>
-                    </div>
-        
-                    <br>
-                    <br>
-        
-                    <div class="col-md-10 form-group" style="text-align: center"></div>
-                        <label>You have entered the Kilometres: </label>
-                        <input type="text" name="kilo_driven" value="{{mLinear.kilo_driven}}" class="form-control" required="1">
-                        <!-- <input name="kilo_driven" readonly="1"> -->
-                    </div>
-        
-                    <br>
-                    <br>
-        
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary btn-block">
-                        Update
-                        </button>
-                    </div>
-        
-                </form>
-        
-                <br>
-                <br>
-        
-                <a href="{{url_for('multi_linear') }}">Go back to Multi linear page</a> | <a href="/">Home page</a>
+                {% if logistic.predicted_value == '1' %}
+                    <input name="purchase" value="Yes" required="1">
+                {% else %}
+                    <input name="purchase" value="No" required="1">
+                {% endif %}
+
+            </div> -->
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-block">
+                Update
+                </button>
+            </div>
+
+        </form>
+
+        <br>
+        <br>
+
+                <a href="{{url_for('logistic') }}">Go back to Logistic Regression page</a> | <a href="/">Home page</a>
             
             
     </body>

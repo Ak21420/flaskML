@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>KNN Classification Algorithm Edit data</title>
+    </head>
+    <body>
+        <form action="/knn_update/{{knn.knnid}}" method="POST">
+            
+            
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Enter the Sepal Length: </label>
+                <input name="sepal_length" value="{{knn.sepal_length}}" required="1">
+            </div>
+
+            <br>
+            <br>
+            
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Enter the Sepal Width: </label>
+                <input name="sepal_width" value="{{knn.sepal_width}}" required="1">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Enter the Petal Length: </label>
+                <input name="petal_length" value="{{knn.petal_length}}" required="1">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Enter the Petal Width: </label>
+                <input name="petal_width" value="{{knn.petal_width}}" required="1">
+            </div>
+
+            <!-- <br>
+            <br> -->
+
+            <!-- <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>The Species looks like: </label>
+                <input name="predicted_value" value="{{knn.predicted_value}}" required="1">
+            </div> -->
+
+            <br>
+            <br>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-block">
+                Update
+                </button>
+            </div>
+
+        </form>
+
+        <br>
+        <br>
+
+        <a href="{{url_for('knn') }}">Go back to KNN Classification page</a> | <a href="/">Home page</a>
+            
+            
+    </body>
+</html>

@@ -35,8 +35,7 @@ conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_
 def simple_linear():
     
     try:
-        request_type_str = request.method
-        
+        request_type_str = request.method      
         try:
             cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         except:
@@ -90,7 +89,7 @@ def simple_linear_layout():
             return "Second"
         
         s = "SELECT * FROM simple WHERE is_delete=FALSE"
-        cur.execute(s) # Execute the SQL
+        cur.execute(s)
         list_users = cur.fetchall()
         cur.close()
 
@@ -186,16 +185,6 @@ def make_picture(training_data_filename, model, new_inp_np_arr, output_file):
     fig.show()
 
 
-# def floats_string_to_np_arr(floats_str):
-#     def is_float(s):
-#         try:
-#             if float(s) >= 0:
-#                 return True
-#         except:
-#             return False
-#     floats = np.array([float(x) for x in floats_str.split(',') if is_float(x)])
-#     return floats.reshape(len(floats), 1)
-
 
 @app.route('/multi_linear', methods=['GET', 'POST'])
 @cross_origin()
@@ -219,8 +208,6 @@ def multi_linear():
 
             for i in range(old_companies.shape[0]):
                 d[old_car_models[i]] = old_companies[i]
-
-            # print(len(d))
 
             companies = sorted(car['company'].unique())
             car_models = sorted(car['name'].unique())
@@ -247,9 +234,6 @@ def multi_linear():
                 print(e)
             
             prediction_new = float(prediction)
-
-            # print(type(prediction))
-
             Dtime = datetime.now()
 
             # CREATE TABLE multi (
@@ -293,23 +277,6 @@ def multi_linear():
 
     except:
         return "Connection Fail"
-
-
-# @app.route('/select_company', methods=['POST'])
-# def select_company():
-
-#     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-
-#     cur.execute('SELECT car_models FROM multi WHERE company_name = %s', (company))
-    
-#     data = cur.fetchall()
-#     cur.close()
-
-#     ret = ''
-#     for entry in data:
-#         ret += '<option value="{}">{}</option>'.format(entry)
-#     return ret
-
 
 @app.route('/multi_linear_layout', methods=['GET', 'POST'])
 def multi_linear_layout():
@@ -364,8 +331,6 @@ def multi_Linear_edit(id):
 
     companies.insert(0,'Select Company')
     
-    # return render_template('mLinear.html',)
-    
     return render_template('mLinear_edit.html', mLinear = data, companies=companies,car_models=car_models,years=year,fuel_types=fuel_type)
 
 
@@ -404,7 +369,6 @@ def multi_Linear_update(id):
             prediction_new = float(prediction)
 
             try:
-                # cur.execute("INSERT INTO multi(company_name,car_models,purchase_year,fuel_type,kilo_driven,predict_price,datetime,is_delete)VALUES (%s,%s,%s,%s,%s,%s,%s,FALSE)", (company_name,car_model,purchase_year_new,fuel_type,driven_new,prediction_new,Dtime))
                 cur.execute("UPDATE multi SET company_name = %s, car_models = %s, purchase_year = %s, fuel_type = %s, kilo_driven = %s, predict_price = %s, datetime = %s WHERE multiid = %s", (company_name,car_model,purchase_year_new,fuel_type,driven_new,prediction_new,Dtime,id))
             except:
                 return "Third"
@@ -430,6 +394,7 @@ def multi_Linear_update(id):
                 return render_template('mLinear_pred.html', mLinear = data)
             except Exception as e:
                 print(e)
+
 
 
 
@@ -460,15 +425,12 @@ def logistic():
 
             Dtime = datetime.now()
 
-            # model = load('logistic.joblib')
-
             # CREATE TABLE logistic (
             #     LogisticID serial primary key NOT NULL,
             #     age text not null ,
             #     expected_salary text not null ,
             #     predicted_value text not null ,
             #     datetime text not null,
-            #     image text not null,
             #     is_delete bool
             # );
 
@@ -490,23 +452,13 @@ def logistic():
 
 
             x_real = np.array([age,expected_salary]).reshape(1, -1)
-            print(x_real)
-            # st_x = StandardScaler()
 
-            print(age)
-            print(expected_salary)
-            # st_model_new = st_x.fit(x_real)
             x_real_process = st_x.transform(x_real)  
-
-            print(x_real_process) 
 
             try:
                 prediction = model.predict(pd.DataFrame(columns=['age', 'expected_salary'], data=x_real_process))
             except Exception as e:
                 print(e)
-
-            print(prediction)
-
 
             try:
                 cur.execute("INSERT INTO logistic(age,expected_salary,predicted_value,datetime,is_delete) VALUES (%s,%s,%s,%s,FALSE)", (str(int(age[0][0])),str(int(expected_salary[0][0])),str(prediction[0]),Dtime))
@@ -536,18 +488,6 @@ def logistic():
 
     except:
         return "Connection Fail"
-
-
-def floats_string_to_np_arr(floats_str):
-    def is_float(s):
-        try:
-            if float(s) >= 0:
-                return True
-        except:
-            return False
-    floats = np.array([float(x) for x in floats_str.split(',') if is_float(x)])
-    return floats.reshape(len(floats), 1)
-
 
 @app.route('/logistic_layout', methods=['GET', 'POST'])
 def logistic_layout():
@@ -583,3 +523,337 @@ def logistic_delete(id):
     cur.close()
     
     return redirect(url_for('logistic_layout'))
+
+
+@app.route('/logistic_edit/<string:id>', methods = ['POST', 'GET'])
+def logistic_edit(id):
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    
+    cur.execute('SELECT * FROM logistic WHERE logisticid = %s', (id,))
+    
+    data = cur.fetchone()
+    cur.close()
+
+    return render_template('logistic_edit.html', logistic = data)
+
+
+@app.route('/logistic_update/<string:id>', methods=['POST'])
+def logistic_update(id):
+    if request.method == 'POST':
+        
+        request_type_str = request.method
+        
+        try:
+            cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        except:
+            return "Second"
+
+        if request_type_str == 'POST':    
+            model = load('logistic.joblib')
+            data_set= pd.read_csv('Social_Network_Ads.csv') 
+
+            x= data_set.iloc[:, [0,1]].values
+            y= data_set.iloc[:, 2].values
+
+            age = request.form['age']
+            expected_salary = request.form['expected_salary']
+
+            Dtime = datetime.now()
+
+            st_x = StandardScaler()
+
+            st_x.fit(x)
+            st_x.transform(x)
+
+            if age:
+                age = floats_string_to_np_arr(age) 
+            else:
+                return "Please enter value"
+            
+            if expected_salary:
+                expected_salary = floats_string_to_np_arr(expected_salary) 
+            else:
+                return "Please enter value"
+
+            x_real = np.array([age,expected_salary]).reshape(1, -1)
+            
+            x_real_process = st_x.transform(x_real)
+
+            try:
+                prediction = model.predict(pd.DataFrame(columns=['age', 'expected_salary'], data=x_real_process))
+            except Exception as e:
+                print(e)
+
+            try:
+                cur.execute("UPDATE logistic SET age = %s, expected_salary = %s, predicted_value = %s, datetime = %s WHERE logisticid = %s", (str(int(age[0][0])),str(int(expected_salary[0][0])),str(prediction[0]),Dtime,id))
+            except Exception as e:
+                print(e)
+
+            try:
+                conn.commit()
+                cur.close()
+            except:
+                return "Forth"
+
+            if len(age) & len(expected_salary):
+                
+                cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)   
+                cur.execute('SELECT * FROM logistic ORDER BY datetime DESC')
+                
+                data = cur.fetchone()
+                cur.close()
+                print(data)
+                request_type_str = request.method
+
+                return render_template('logistic_pred.html', logistic = data)
+            else:
+                return "Please enter Valid values"
+
+
+
+
+@app.route('/knn', methods=['GET', 'POST'])
+def knn():
+    
+    try:
+        model = load('Knn.joblib')
+        data_set= pd.read_csv('iris.csv') 
+
+        request_type_str = request.method
+        
+        try:
+            cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        except:
+            return "Second"
+        
+        if request_type_str == 'GET':
+            return render_template('knn.html')
+        else:
+            x= data_set.iloc[:, 0:-1].values
+            y= data_set.iloc[:, -1].values
+
+            sepal_length = request.form['sepal_length']
+            sepal_width = request.form['sepal_width']
+            petal_length = request.form['petal_length']
+            petal_width = request.form['petal_width']
+            
+            ar = []
+
+            ar.append(sepal_length)
+            ar.append(sepal_width)
+            ar.append(petal_length)
+            ar.append(petal_width)
+
+            Dtime = datetime.now()
+
+            # CREATE TABLE knn (
+            #     knnID serial primary key NOT NULL,
+            #     sepal_length float not null ,
+            #     sepal_width float not null ,
+            #     petal_length float not null ,
+            #     petal_width float not null ,
+            #     predicted_value text not null ,
+            #     datetime text not null,
+            #     is_delete bool
+            # );
+            
+            st_x = StandardScaler()
+
+            st_x.fit(x)
+            st_x.transform(x)
+
+            ar_str = ','.join(ar)
+
+            if ar:
+                ar_new = floats_string_to_np_arr(ar_str) 
+            else:
+                return "Please enter value"
+            
+            x_real = np.array([ar_new[0],ar_new[1],ar_new[2],ar_new[3]]).reshape(1, -1)
+            
+            x_real_process = st_x.transform(x_real)  
+
+            try:
+                prediction = model.predict(pd.DataFrame(columns=['SepalLengthCm', 'SepalWidthCm', 'PetalLengthCm', 'PetalWidthCm'], data=x_real_process))
+            except Exception as e:
+                print(e)
+
+            try:
+                cur.execute("INSERT INTO knn(sepal_length,sepal_width,petal_length,petal_width,predicted_value,datetime,is_delete) VALUES (%s,%s,%s,%s,%s,%s,FALSE)", (str(float(ar[0])),str(float(ar[1])),str(float(ar[2])),str(float(ar[3])),str(prediction[0]),Dtime))
+            except Exception as e:
+                print(e)
+
+            try:
+                conn.commit()
+                cur.close()
+            except:
+                return "Forth"
+
+            if len(ar):
+                
+                cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    
+                cur.execute('SELECT * FROM knn ORDER BY datetime DESC')
+                
+                data = cur.fetchone()
+                cur.close()
+                print(data)
+                request_type_str = request.method
+
+                return render_template('knn_pred.html', knn = data)
+            else:
+                return "Please enter Valid values"
+
+    except Exception as e:
+        print(e)
+
+
+@app.route('/knn_layout', methods=['GET', 'POST'])
+def knn_layout():
+    try:
+        request_type_str = request.method
+        
+        try:
+            cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        except:
+            return "Second"
+        
+        s = "SELECT * FROM knn WHERE is_delete='FALSE'"
+
+        try:
+            cur.execute(s)
+        except Exception as e:
+            print(e)
+        list_users = cur.fetchall()
+        cur.close()
+
+        return render_template('knn_layout.html', list_users = list_users)
+
+    except Exception as e:
+        print(e)
+
+
+@app.route('/knn_delete/<string:id>', methods = ['POST','GET'])
+def knn_delete(id):
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    
+    cur.execute('UPDATE knn SET is_delete = TRUE WHERE knnid = {0}'.format(id))
+    conn.commit()
+    cur.close()
+    
+    return redirect(url_for('knn_layout'))
+
+
+@app.route('/knn_edit/<string:id>', methods = ['POST', 'GET'])
+def knn_edit(id):
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    
+    cur.execute('SELECT * FROM knn WHERE knnid = %s', (id,))
+    
+    data = cur.fetchone()
+    cur.close()
+
+    return render_template('knn_edit.html', knn = data)
+
+
+@app.route('/knn_update/<string:id>', methods=['POST'])
+def knn_update(id):
+    if request.method == 'POST':
+        
+        request_type_str = request.method
+        
+        try:
+            cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        except:
+            return "Second"
+
+        if request_type_str == 'POST':    
+            model = load('Knn.joblib')
+            data_set= pd.read_csv('iris.csv') 
+         
+            x= data_set.iloc[:, 0:-1].values
+            y= data_set.iloc[:, -1].values
+         
+            sepal_length = request.form['sepal_length']
+            sepal_width = request.form['sepal_width']
+            petal_length = request.form['petal_length']
+            petal_width = request.form['petal_width']
+            
+            ar = []
+         
+            ar.append(sepal_length)
+            ar.append(sepal_width)
+            ar.append(petal_length)
+            ar.append(petal_width)
+
+            Dtime = datetime.now()
+    
+            st_x = StandardScaler()
+
+            st_x.fit(x)
+            st_x.transform(x)
+
+            ar_str = ','.join(ar)
+         
+            if ar:
+                ar_new = floats_string_to_np_arr(ar_str) 
+            else:
+                return "Please enter value"
+            
+            x_real = np.array([ar_new[0],ar_new[1],ar_new[2],ar_new[3]]).reshape(1, -1)
+            
+            x_real_process = st_x.transform(x_real)  
+
+            try:
+                prediction = model.predict(pd.DataFrame(columns=['SepalLengthCm', 'SepalWidthCm', 'PetalLengthCm', 'PetalWidthCm'], data=x_real_process))
+            except Exception as e:
+                print(e)
+
+            try:
+                cur.execute("UPDATE knn SET sepal_length = %s, sepal_width = %s, petal_length = %s, petal_width = %s, predicted_value = %s, datetime = %s WHERE knnid = %s", (str(float(ar[0])),str(float(ar[1])),str(float(ar[2])),str(float(ar[3])),str(prediction[0]),Dtime,id))
+            except Exception as e:
+                print(e)
+
+            try:
+                conn.commit()
+                cur.close()
+            except:
+                return "Forth"
+
+            if len(ar):
+                
+                cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    
+                cur.execute('SELECT * FROM knn ORDER BY datetime DESC')
+                
+                data = cur.fetchone()
+                cur.close()
+                print(data)
+                request_type_str = request.method
+
+                return render_template('knn_pred.html', knn = data)
+            else:
+                return "Please enter Valid values"
+
+
+
+def floats_string_to_np_arr(floats_str):
+    # print(floats_str)
+    def is_float(s):
+        try:
+            if float(s) >= 0:
+                return True
+        except:
+            return False
+
+    # floats = []
+    # for i in floats_str:
+    #     print(i)
+    #     if float(i):
+    #         is_float(i)
+    #         floats.append(i)
+
+    # floats_arr = np.array(floats)
+    # print(floats_arr)
+    floats = np.array([float(x) for x in floats_str.split(',') if is_float(x)])
+    return floats.reshape(len(floats), 1)
