@@ -28,7 +28,7 @@ conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_
 @knn_algo.route('/knn', methods=['GET', 'POST'])
 def knn():  
     try:
-        model = load('Knn.joblib')
+        model = load('joblib_files/Knn.joblib')
         data_set= pd.read_csv('csv_files/iris.csv') 
 
         request_type_str = request.method
@@ -187,7 +187,7 @@ def knn_update(id):
             return "Second"
 
         if request_type_str == 'POST':    
-            model = load('Knn.joblib')
+            model = load('joblib_files/Knn.joblib')
             data_set= pd.read_csv('csv_files/iris.csv') 
          
             x= data_set.iloc[:, 0:-1].values

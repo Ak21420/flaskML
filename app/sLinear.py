@@ -45,7 +45,7 @@ def simple_linear():
 
             random_string = uuid.uuid4().hex
             path = "static/" + random_string + ".svg"
-            model = load('model.joblib')
+            model = load('joblib_files/model.joblib')
 
             try:
                 cur.execute("INSERT INTO simple(txt_numbers,datetime,image,is_delete) VALUES (%s,%s,%s,FALSE)", (text,Dtime,random_string))
@@ -64,7 +64,7 @@ def simple_linear():
                 return "Please enter value"
             print("test")
             if len(np_arr):
-                make_picture('AgesAndHeights.pkl', model, np_arr, path)
+                make_picture('joblib_files/AgesAndHeights.pkl', model, np_arr, path)
                 return render_template('simple_linear_folder/sLinear.html', href=path)
             else:
                 return "Please enter Valid values => " + text
@@ -132,7 +132,7 @@ def simple_Linear_update(id):
 
             random_string = uuid.uuid4().hex
             path = "static/" + random_string + ".svg"
-            model = load('model.joblib')
+            model = load('joblib_files/model.joblib')
 
             try:
                 cur.execute("UPDATE simple SET txt_numbers = %s, image = %s, datetime = %s WHERE simpleid = %s", (text, random_string, Dtime, id))
@@ -151,7 +151,7 @@ def simple_Linear_update(id):
                 return "Please enter value"
 
             if len(np_arr):
-                make_picture('AgesAndHeights.pkl', model, np_arr, path)
+                make_picture('joblib_files/AgesAndHeights.pkl', model, np_arr, path)
                 return redirect(url_for('sLinear.simple_linear_layout'))
             else:
                 return "Please enter Valid values => " + text
