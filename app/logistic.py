@@ -29,7 +29,7 @@ conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_
 def logistic():   
     try:
         model = load('logistic.joblib')
-        data_set= pd.read_csv('Social_Network_Ads.csv') 
+        data_set= pd.read_csv('csv_files/Social_Network_Ads.csv') 
 
         request_type_str = request.method
         
@@ -186,7 +186,7 @@ def logistic_update(id):
 
         if request_type_str == 'POST':    
             model = load('logistic.joblib')
-            data_set= pd.read_csv('Social_Network_Ads.csv') 
+            data_set= pd.read_csv('csv_files/Social_Network_Ads.csv') 
 
             x= data_set.iloc[:, [0,1]].values
             y= data_set.iloc[:, 2].values

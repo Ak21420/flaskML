@@ -30,7 +30,7 @@ conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_
 def multi_linear():
     try:
         model=pickle.load(open('mLinear.pkl','rb'))
-        car=pd.read_csv('Cleaned_Car_data.csv')
+        car=pd.read_csv('csv_files/Cleaned_Car_data.csv')
 
         request_type_str = request.method
         
@@ -167,7 +167,7 @@ def multi_Linear_delete(id):
 @mLinear.route('/multi_Linear_edit/<string:id>', methods = ['POST', 'GET'])
 def multi_Linear_edit(id):
     try:
-        car=pd.read_csv('Cleaned_Car_data.csv')
+        car=pd.read_csv('csv_files/Cleaned_Car_data.csv')
         cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         
         cur.execute('SELECT * FROM multi WHERE multiid = %s', (id,))
@@ -218,7 +218,6 @@ def multi_Linear_update(id):
             Dtime = datetime.now()
 
             model=pickle.load(open('mLinear.pkl','rb'))
-            car=pd.read_csv('Cleaned_Car_data.csv')
 
             try:
                 prediction = model.predict(pd.DataFrame(columns=['name', 'company', 'year', 'kms_driven', 'fuel_type'], data=np.array([car_model,company_name,purchase_year_new,driven_new,fuel_type]).reshape(1, 5)))
