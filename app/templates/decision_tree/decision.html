@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+
+        <title>Decision Tree</title>
+
+    </head>
+
+    <body>
+        <h1>Decision Tree</h1>
+
+        <form action="{{url_for('decision_tree_algo.decision_tree')}}" method="POST">
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Enter Passenger name: </label>
+                <input name="name" required="1">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Enter Passenger Ticket number: </label>
+                <input name="ticket_no" required="1">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Select Passenger Ticket class: </label>
+                <select class="selectpicker form-control" name="tclass" required="1">
+                    <option value="1st">1st</option>
+                    <option value="2nd">2nd</option>
+                    <option value="3rd">3rd</option>
+                </select>
+                <!-- <input name="name" required="1"> -->
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Enter Passenger Age: </label>
+                <input name="age" type="number" required="1">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Enter Passenger Ticket Fare: </label>
+                <input name="fare" required="1">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Select Passenger Gender: </label>
+                <select class="selectpicker form-control" name="gender" required="1">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+                <!-- <input name="ticket_no" required="1"> -->
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Select Embarked: </label>
+                <select class="selectpicker form-control" name="embarked" required="1">
+                    <option value="Cherbourg">Cherbourg</option>
+                    <option value="Queenstown">Queenstown</option>
+                    <option value="Southampton">Southampton</option>
+                </select>
+                <!-- <input name="ticket_no" required="1"> -->
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Enter Number of Siblings: </label>
+                <input name="siblings" type="number" required="1">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Enter Number of Parents: </label>
+                <input name="parents" type="number" required="1">
+            </div>
+
+            <br>
+            <br>
+            
+            <input type="submit">
+            
+        </form> 
+        
+        <br>
+        <br>
+
+        <a href="/">Go back to Home page</a>  |  <a href="{{url_for('decision_tree_algo.decision_layout') }}">Click Here for view past entries</a>
+
+    </body>
+</html>

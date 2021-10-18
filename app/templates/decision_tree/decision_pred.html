@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+
+        <title>Multi Linear - Car Price Predictor</title>
+
+    </head>
+
+    <body>
+        <h1>Your car Predicted Price</h1>
+
+        <form action="/decision_tree/{{decision_tree.decisionid}}" method="POST">
+            
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Passenger name: </label>
+                <input name="name" value="{{decision_tree.t_name}}" readonly="1">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Passenger Ticket number: </label>
+                <input name="ticket_no" value="{{decision_tree.ticket_no}}" readonly="1">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Passenger Ticket class: </label>
+
+                <!-- <select class="selectpicker form-control" name="tclass" readonly="1"> -->
+                    
+                    <!-- {% if decision_tree.tclass == '1st' %}
+                        <option value="{{decision_tree.tclass}}" selected>{{decision_tree.tclass}}</option>
+                    {% elif decision_tree.tclass == '2nd' %}
+                        <input name="tclass" value="2nd" readonly="1">
+                    {% else %}
+                        <input name="tclass" value="3rd" readonly="1">
+                    {% endif %} -->
+
+                    {% if decision_tree.tclass == '1st' %}
+                        <input name="tclass" value="1st" readonly="1">
+                    {% elif decision_tree.tclass == '2nd' %}
+                        <input name="tclass" value="2nd" readonly="1">
+                    {% else %}
+                        <input name="tclass" value="3rd" readonly="1">
+                    {% endif %}
+                    
+                    <!-- <option value="1st">1st</option>
+                    <option value="2nd">2nd</option>
+                    <option value="3rd">3rd</option> -->
+                <!-- </select> -->
+                <!-- <input name="name" readonly="1"> -->
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Passenger Age: </label>
+                <input name="age" type="number" value="{{decision_tree.t_age}}" readonly="1">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Passenger Ticket Fare: </label>
+                <input name="fare" type="number" value="{{decision_tree.fare}}" readonly="1">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Select Passenger Gender: </label>
+                <!-- <select class="selectpicker form-control" name="gender" readonly="1"> -->
+
+                    {% if decision_tree.gender == 1 %}
+                        <input name="gender" value="Male" readonly="1">
+                    {% else %}
+                        <input name="gender" value="Female" readonly="1">
+                    {% endif %}
+                    <!-- <option value="Male">Male</option>
+                    <option value="Female">Female</option> -->
+                <!-- </select> -->
+                <!-- <input name="ticket_no" readonly="1"> -->
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Select Embarked: </label>
+                <!-- <select class="selectpicker form-control" name="embarked" readonly="1"> -->
+
+                    {% if decision_tree.embarked == 'Cherbourg' %}
+                        <input name="embarked" value="Cherbourg" readonly="1">
+                    {% elif decision_tree.embarked == 'Queenstown' %}
+                        <input name="embarked" value="Queenstown" readonly="1">
+                    {% else %}
+                        <input name="embarked" value="Southampton" readonly="1">
+                    {% endif %}
+                    <!-- <option value="Cherbourg">Cherbourg</option>
+                    <option value="Queenstown">Queenstown</option>
+                    <option value="Southampton">Southampton</option> -->
+                <!-- </select> -->
+                <!-- <input name="ticket_no" readonly="1"> -->
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Total Family members: </label>
+                <input name="siblings" type="number" value="{{decision_tree.family_member}}" readonly="1">
+            </div>
+
+            <br>
+            <br>
+
+            
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Pessenger will survive or not: </label>
+
+                {% if decision_tree.predict == 1 %}
+                    <input name="predict" value="Survive" readonly="1">
+                {% else %}
+                    <input name="predict" value="Not Survive" readonly="1">
+                {% endif %}
+
+            </div>
+            
+        </form> 
+
+        <br>
+        <br>
+
+        <a href="{{url_for('decision_tree_algo.decision_tree') }}">Go back to Decision Tree page</a>  |  <a href="/">Home page</a>  |  <a href="{{url_for('decision_tree_algo.decision_layout') }}">Click Here for view past entries</a>
+    </body>
+</html>
+
+
+

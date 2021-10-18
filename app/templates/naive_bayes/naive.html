@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+
+        <title>Naive Bayes Email Prediction</title>
+
+    </head>
+
+    <body>
+        <h1>Naive Bayes</h1>
+
+        <form action="{{url_for('naive_bayes_algo.naive_bayes')}}" method="POST">
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Enter your message to check Spam or not: </label>
+                <input name="message" required="1">
+            </div>
+
+            <br>
+            <br>
+            
+            <input type="submit">
+            
+        </form> 
+        
+        <br>
+        <br>
+
+        <a href="/">Go back to Home page</a>  |  <a href="{{url_for('naive_bayes_algo.naive_layout') }}">Click Here for view past entries</a>
+
+    </body>
+</html>

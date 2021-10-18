@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Decision Tree Algorithm Edit data</title>
+    </head>
+    <body>
+
+        <form action="/decision_update/{{decision_tree_data.decisionid}}" method="POST">
+    
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>You have Entered this message: </label>
+                <input type="text" name="message" value="{{decision_tree_data.message}}" class="form-control" required="1">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-block">
+                Update
+                </button>
+            </div>
+
+        </form>
+        
+        <br>
+        <br>
+
+        <a href="{{ url_for('decision_tree_algo.decision_tree') }}">Go back to Decision Tree page</a>  |  <a href="/">Home page</a>  |  <a href="{{url_for('decision_tree_algo.decision_layout') }}">Go back to decision Tree past data page</a>
+            
+    </body>
+</html>
