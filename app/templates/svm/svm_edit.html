@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Support Vector Machine Algorithm Edit data</title>
+    </head>
+    <body>
+
+        <form action="/svm_update/{{svm_data.svmid}}" method="POST">
+    
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Select Clump: </label>
+                <select class="selectpicker form-control" name="clump" required="1" value="{{svm_data.clump}}">
+                    {% for s in seq %}
+
+                        {% if s == svm_data.clump %}
+                            <option value="{{ s }}" selected>{{ s }}</option>
+                        {% else %}
+                            <option value="{{ s }}">{{ s }}</option>
+                        {% endif %}
+                    
+                    {% endfor %}
+                </select>
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Select Unif Size: </label>
+                <!-- <input name="unif_size" value="{{svm_data.unif_size}}" readonly="1"> -->
+                <select class="selectpicker form-control" name="unif_size" required="1" value="{{svm_data.unif_size}}">
+                    {% for s in seq %}
+
+                        {% if s == svm_data.unif_size %}
+                            <option value="{{ s }}" selected>{{ s }}</option>
+                        {% else %}
+                            <option value="{{ s }}">{{ s }}</option>
+                        {% endif %}
+                    
+                    {% endfor %}
+                </select>
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Select Unif Shape: </label>
+                <!-- <input name="unif_shape" value="{{svm_data.unif_shape}}" readonly="1"> -->
+                <select class="selectpicker form-control" name="unif_shape" required="1" value="{{svm_data.unif_shape}}">
+                    {% for s in seq %}
+
+                        {% if s == svm_data.unif_shape %}
+                            <option value="{{ s }}" selected>{{ s }}</option>
+                        {% else %}
+                            <option value="{{ s }}">{{ s }}</option>
+                        {% endif %}
+                    
+                    {% endfor %}
+                </select>
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Select Marg Adh: </label>
+                <!-- <input name="marg_adh" value="{{svm_data.marg_adh}}" readonly="1"> -->
+                <select class="selectpicker form-control" name="marg_adh" required="1" value="{{svm_data.marg_adh}}">
+                    {% for s in seq %}
+
+                        {% if s == svm_data.marg_adh %}
+                            <option value="{{ s }}" selected>{{ s }}</option>
+                        {% else %}
+                            <option value="{{ s }}">{{ s }}</option>
+                        {% endif %}
+                    
+                    {% endfor %}
+                </select>
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Select Sing Epi Size: </label>
+                <!-- <input name="sing_epi_size" value="{{svm_data.sing_epi_size}}" readonly="1"> -->
+                <select class="selectpicker form-control" name="sing_epi_size" required="1" value="{{svm_data.sing_epi_size}}">
+                    {% for s in seq %}
+
+                        {% if s == svm_data.sing_epi_size %}
+                            <option value="{{ s }}" selected>{{ s }}</option>
+                        {% else %}
+                            <option value="{{ s }}">{{ s }}</option>
+                        {% endif %}
+                    
+                    {% endfor %}
+                </select>
+            </div>
+
+            <br>
+            <br>
+         
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Select Bare Nuc: </label>
+                <!-- <input name="bare_nuc" value="{{svm_data.bare_nuc}}" readonly="1"> -->
+                <select class="selectpicker form-control" name="bare_nuc" required="1" value="{{svm_data.bare_nuc}}">
+                    {% for s in seq %}
+
+                        {% if s == svm_data.bare_nuc %}
+                            <option value="{{ s }}" selected>{{ s }}</option>
+                        {% else %}
+                            <option value="{{ s }}">{{ s }}</option>
+                        {% endif %}
+                    
+                    {% endfor %}
+                </select>
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Select Bland Chrom: </label>
+                <!-- <input name="bland_chrom" value="{{svm_data.bland_chrom}}" readonly="1"> -->
+                <select class="selectpicker form-control" name="bland_chrom" required="1" value="{{svm_data.bland_chrom}}">
+                    {% for s in seq %}
+
+                        {% if s == svm_data.bland_chrom %}
+                            <option value="{{ s }}" selected>{{ s }}</option>
+                        {% else %}
+                            <option value="{{ s }}">{{ s }}</option>
+                        {% endif %}
+                    
+                    {% endfor %}
+                </select>
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Select Norm Nucl: </label>
+                <!-- <input name="norm_nucl" value="{{svm_data.norm_nucl}}" readonly="1"> -->
+                <select class="selectpicker form-control" name="norm_nucl" required="1" value="{{svm_data.norm_nucl}}">
+                    {% for s in seq %}
+
+                        {% if s == svm_data.norm_nucl %}
+                            <option value="{{ s }}" selected>{{ s }}</option>
+                        {% else %}
+                            <option value="{{ s }}">{{ s }}</option>
+                        {% endif %}
+                    
+                    {% endfor %}
+                </select>
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Select Mit: </label>
+                <!-- <input name="mit" value="{{svm_data.mit}}" readonly="1"> -->
+                <select class="selectpicker form-control" name="mit" required="1" value="{{svm_data.mit}}">
+                    {% for s in seq %}
+
+                        {% if s == svm_data.mit %}
+                            <option value="{{ s }}" selected>{{ s }}</option>
+                        {% else %}
+                            <option value="{{ s }}">{{ s }}</option>
+                        {% endif %}
+                    
+                    {% endfor %}
+                </select>
+            </div>
+
+            <br>
+            <br>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-block">
+                Update
+                </button>
+            </div>
+
+        </form>
+        
+        <br>
+        <br>
+
+        <a href="{{ url_for('svm_algo.svm') }}">Go back to Support Vector Machine page</a>  |  <a href="/">Home page</a>  |  <a href="{{url_for('svm_algo.svm_layout') }}">Go back to Support Vector Machine past data page</a>
+            
+    </body>
+</html>

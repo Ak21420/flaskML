@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+
+        <title>Support Vector Machine</title>
+
+    </head>
+
+    <body>
+        <h1>Cancer Level</h1>
+
+        <form action="/svm/{{svm_data.svmid}}" method="POST">
+            
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>You have select Clump: </label>
+                <input name="clump" value="{{svm_data.clump}}" readonly="1">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>You have select Unif Size: </label>
+                <input name="unif_size" value="{{svm_data.unif_size}}" readonly="1">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>You have select Unif Shape: </label>
+                <input name="unif_shape" value="{{svm_data.unif_shape}}" readonly="1">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>You have select Marg Adh: </label>
+                <input name="marg_adh" value="{{svm_data.marg_adh}}" readonly="1">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>You have select Sing Epi Size: </label>
+                <input name="sing_epi_size" value="{{svm_data.sing_epi_size}}" readonly="1">
+            </div>
+
+            <br>
+            <br>
+         
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>You have select Bare Nuc: </label>
+                <input name="bare_nuc" value="{{svm_data.bare_nuc}}" readonly="1">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>You have select Bland Chrom: </label>
+                <input name="bland_chrom" value="{{svm_data.bland_chrom}}" readonly="1">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>You have select Norm Nucl: </label>
+                <input name="norm_nucl" value="{{svm_data.norm_nucl}}" readonly="1">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>You have select Mit: </label>
+                <input name="mit" value="{{svm_data.mit}}" readonly="1">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Cancer Level: </label>
+
+                {% if svm_data.predict == 1 %}
+                    <input name="predict" value="Malignant (4)" readonly="1">
+                {% else %}
+                    <input name="predict" value="Benign (2)" readonly="1">
+                {% endif %}
+
+            </div>
+            
+        </form> 
+
+        <br>
+        <br>
+
+        <a href="{{url_for('svm_algo.svm') }}">Go back to Support Vector Machine page</a>  |  <a href="/">Home page</a>  |  <a href="{{url_for('svm_algo.svm_layout') }}">Click Here for view past entries</a>
+    </body>
+</html>
+
+
+
