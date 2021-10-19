@@ -22,8 +22,15 @@
     <thead>
       <tr>
         <td>Index</td>
-        <td>Message</td>
-        <td>Status</td>
+        <td>Passenger Name</td>
+        <td>Ticket No</td>
+        <td>Ticket Class</td>
+        <td>Passenger Age</td>
+        <td>Ticket Fare</td>
+        <td>Passenger Gender</td>
+        <td>Embarked</td>
+        <td>Total Family Members</td>
+        <td>Survived or Not</td>
         <td>Date Time</td>
         <td>Action</td>
       </tr>
@@ -33,11 +40,17 @@
       <tr>
         <td>{{loop.index}}</td>
         <td>{{row[1]}}</td>
-        <!-- <td>{{row[2]}}</td> -->
-        <td>
-          {% if row[2] == 1 %} SPAM {% else %} HAM {% endif %}
-        </td>
+        <td>{{row[2]}}</td>
         <td>{{row[3]}}</td>
+        <td>{{row[4]}}</td>
+        <td>{{row[5]}}</td>
+        <td>{{row[6]}}</td>
+        <td>{{row[7]}}</td>
+        <td>{{row[8]}}</td>
+        <td>
+          {% if row[9] == 1 %} Survived {% else %} Not Survived {% endif %}
+        </td>
+        <td>{{row[10][:19]}}</td>
         <td width="130">
           <a href="/decision_edit/{{row[0]}}" class="btn btn-secondary btn-sm">edit</a>
           <a href="/decision_delete/{{row[0]}}" class="btn btn-danger btn-delete btn-sm">delete</a>

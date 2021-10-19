@@ -2,12 +2,12 @@
 <html lang="en">
     <head>
 
-        <title>Multi Linear - Car Price Predictor</title>
+        <title>Decision Tree</title>
 
     </head>
 
     <body>
-        <h1>Your car Predicted Price</h1>
+        <h1>Pessenger will Survive or Not</h1>
 
         <form action="/decision_tree/{{decision_tree.decisionid}}" method="POST">
             
@@ -68,7 +68,7 @@
 
             <div class="col-md-10 form-group" style="text-align: center"></div>
                 <label>Passenger Ticket Fare: </label>
-                <input name="fare" type="number" value="{{decision_tree.fare}}" readonly="1">
+                <input name="fare" value="{{decision_tree.fare}}" readonly="1">
             </div>
 
             <br>

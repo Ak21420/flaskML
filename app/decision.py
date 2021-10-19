@@ -212,49 +212,102 @@ def decision_edit(id):
         cur.close()
         
         return render_template('decision_tree/decision_edit.html', decision_tree_data = data)
-    except:
-        return "Connection Fail"
+    except Exception as e:
+        print(e)
 
 @decision_tree_algo.route('/decision_update/<string:id>', methods=['POST'])
 def decision_update(id):
-    if request.method == 'POST':
-        message = request.form['message']
+    
+    if request.method == 'POST':        
+        model = load('joblib_files/decision.joblib')
+        titanic_data = pd.read_csv("csv_files/titanic.csv")
+        
+        titanic_data.Embarked = titanic_data.Embarked.fillna(titanic_data['Embarked'].mode()[0])
+        median_age = titanic_data.Age.median()
+        titanic_data.Age.fillna(median_age, inplace = True)
+        titanic_data.drop('Cabin', axis = 1,inplace = True)
+        titanic_data['Fare'] = titanic_data['Fare'].replace(0,titanic_data['Fare'].median())
+        titanic_data['FamilySize'] = titanic_data['SibSp'] + titanic_data['Parch'] + 1
+        titanic_data['GenderClass'] = titanic_data.apply(lambda x: 'child' if x['Age'] < 15 else x['Sex'],axis=1)
+        titanic_data = pd.get_dummies(titanic_data, columns=['GenderClass','Embarked'], drop_first=True)
+        titanic = titanic_data.drop(['Name','Ticket','Sex','SibSp','Parch','PassengerId'], axis = 1)
 
-        message = message.replace("'", " ")
-        
-        model = load('joblib_files/decision_tree.joblib')
-        
-        df = pd.read_csv("csv_files/titanic.csv")
-        df['spam'] = df['Category'].apply(lambda x: 1 if x=='spam' else 0)
+        X = titanic.loc[:,titanic.columns != 'Survived']
+        y = titanic.Survived 
+
+        scaler = StandardScaler()
+
+        scaler.fit(X)
+
+        X = scaler.transform(X)
 
         try:
             cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         except:
             return "Second"
+    
+        name = request.form['name']
+        ticket_no = request.form['ticket_no']
+        tclass_str = request.form['tclass']
+        age = request.form['age']
+        fare = request.form['fare']
+        gender = request.form['gender']
+        embarked = request.form['embarked']
+        family_member = request.form['family_member']  
 
-        message_list = [message]
+        ar = [] 
+        ar.append(int(age))
+        ar.append(float(fare))
+        ar.append(int(family_member))
 
-        # print(message_list)
-        X = df.Message
-        y = df.spam
+        print(ar)
+        if ar:
+            st = check_values(ar)
 
-        v = CountVectorizer()
-        X_count = v.fit_transform(X.values)
+            if st=="Success":
+                pass
+            else:
+                return "Write Posible values!!!"
 
-        message_count = v.transform(message_list)
+            if float(age) > 100:
+                return "Write Posible values"
+        else:
+            return "Write values"
+
+        if gender == 'Male':
+            female,male = 0,1
+        else:
+            female,male = 1,0
+
+        if embarked == 'Queenstown':
+            embarked_q,embarked_s = 1,0
+        elif embarked == 'Southampton':
+            embarked_q,embarked_s = 0,1
+        else:
+            embarked_q,embarked_s = 0,0
+
+        if tclass_str == '1st':
+            tclass = 1
+        elif tclass_str == '2nd':
+            tclass = 2
+        else:
+            tclass = 3
+
+        x_real = np.array([tclass,age,fare,family_member,female,male,embarked_q,embarked_s]).reshape(1, -1)
+        x_real_process = scaler.transform(x_real)
 
         try:
-            prediction = model.predict(message_count)
+            prediction = model.predict(pd.DataFrame(columns=['tclass','age','fare','family_size','female','male','embarked_q','embarked_s'], data = x_real_process))
         except Exception as e:
             print(e)
         
         Dtime = datetime.now()
 
         try:
-            cur.execute("UPDATE decision SET message = %s, predict = %s, datetime = %s WHERE decisionid = %s", (message,int(prediction[0]),Dtime,id))
+            cur.execute("UPDATE decision SET t_name = %s, ticket_no = %s, tclass = %s,t_age = %s,fare = %s,gender = %s, embarked = %s, family_member = %s,predict = %s,datetime = %s WHERE decisionid = %s", (name,ticket_no,tclass,int(age),float(fare),gender,embarked,int(family_member),int(prediction[0]),Dtime,id))
         except Exception as e:
             print(e)
-
+            
         try:
             conn.commit()
             cur.close()

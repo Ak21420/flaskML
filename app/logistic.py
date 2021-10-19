@@ -272,6 +272,7 @@ def floats_string_to_np_arr(floats_str):
     floats = np.array([float(x) for x in floats_str.split(',') if is_float(x)])
     return floats.reshape(len(floats), 1)
 
+
 def check_values(values_array):
     ar = []
     for i in values_array:

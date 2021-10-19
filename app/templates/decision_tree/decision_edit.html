@@ -6,11 +6,123 @@
     </head>
     <body>
 
-        <form action="/decision_update/{{decision_tree_data.decisionid}}" method="POST">
+        <form action="{{url_for('decision_tree_algo.decision_update',id=decision_tree_data.decisionid)}}" method="POST">
+            <!-- /decision_update/{{decision_tree_data.DecisionID}} -->
     
             <div class="col-md-10 form-group" style="text-align: center"></div>
-                <label>You have Entered this message: </label>
-                <input type="text" name="message" value="{{decision_tree_data.message}}" class="form-control" required="1">
+                <label>Passenger name: </label>
+                <input name="name" value="{{decision_tree_data.t_name}}" required="1">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Passenger Ticket number: </label>
+                <input name="ticket_no" value="{{decision_tree_data.ticket_no}}" required="1">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Passenger Ticket class: </label>
+
+                <!-- <select class="selectpicker form-control" name="tclass" required="1">
+                    <option value="1st">1st</option>
+                    <option value="2nd">2nd</option>
+                    <option value="3rd">3rd</option>
+                </select> -->
+
+                <select class="selectpicker form-control" name="tclass" required="1">
+                    {% if decision_tree_data.tclass == '1' %}
+                        <option value="1st" name="tclass" selected>1st</option>
+                        <option value="2nd" name="tclass">2nd</option>
+                        <option value="3rd" name="tclass">3rd</option>
+                    {% elif decision_tree_data.tclass == '2' %}
+                        <option value="1st" name="tclass">1st</option>
+                        <option value="2nd" name="tclass" selected>2nd</option>
+                        <option value="3rd" name="tclass">3rd</option>
+                    {% else %}
+                        <option value="1st"  name="tclass">1st</option>
+                        <option value="2nd"  name="tclass">2nd</option>
+                        <option value="3rd" name="tclass" selected>3rd</option>
+                    {% endif %}
+                </select>
+                    
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Passenger Age: </label>
+                <input name="age" type="number" value="{{decision_tree_data.t_age}}" required="1">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Passenger Ticket Fare: </label>
+                <input name="fare" value="{{decision_tree_data.fare}}" required="1">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Select Passenger Gender: </label>
+                    <select class="selectpicker form-control" name="gender" required="1">
+                        {% if decision_tree_data.gender == 'Male' %}
+                            <option value="Male"  name="gender" selected>Male</option>
+                            <option value="Female" name="gender" >Female</option>
+                        {% else %}
+                            <option value="Male" name="gender" >Male</option>
+                            <option value="Female"  name="gender" selected>Female</option>
+                        {% endif %}
+                    </select>
+
+                    <!-- <select class="selectpicker form-control" name="gender" required="1">
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select> -->
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Select Embarked: </label>
+                    <select class="selectpicker form-control" name="embarked" required="1">
+                        {% if decision_tree_data.embarked == 'Cherbourg' %}
+                            <option value="Cherbourg"  name="embarked" selected>Cherbourg</option>
+                            <option value="Queenstown" name="embarked" >Queenstown</option>
+                            <option value="Southampton" name="embarked" >Southampton</option>
+                        {% elif decision_tree_data.embarked == 'Queenstown' %}
+                            <option value="Cherbourg" name="embarked" >Cherbourg</option>
+                            <option value="Queenstown"  name="embarked" selected>Queenstown</option>
+                            <option value="Southampton" name="embarked" >Southampton</option>
+                        {% else %}
+                            <option value="Cherbourg" name="embarked" >Cherbourg</option>
+                            <option value="Queenstown" name="embarked" >Queenstown</option>
+                            <option value="Southampton" name="embarked"  selected>Southampton</option>
+                        {% endif %}
+                    </select>
+
+                    <!-- <select class="selectpicker form-control" name="embarked" required="1">
+                        <option value="Cherbourg">Cherbourg</option>
+                        <option value="Queenstown">Queenstown</option>
+                        <option value="Southampton">Southampton</option>
+                    </select> -->
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Total Family members: </label>
+                <input name="family_member" type="number" value="{{decision_tree_data.family_member}}" required="1">
             </div>
 
             <br>
@@ -27,7 +139,7 @@
         <br>
         <br>
 
-        <a href="{{ url_for('decision_tree_algo.decision_tree') }}">Go back to Decision Tree page</a>  |  <a href="/">Home page</a>  |  <a href="{{url_for('decision_tree_algo.decision_layout') }}">Go back to decision Tree past data page</a>
+        <a href="{{ url_for('decision_tree_algo.decision_tree') }}">Go back to Decision Tree page</a>  |  <a href="/">Home page</a>  |  <a href="{{url_for('decision_tree_algo.decision_layout') }}">Go back to Decision Tree past data page</a>
             
     </body>
 </html>
