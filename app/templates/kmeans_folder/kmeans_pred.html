@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+
+        <title>K means Clustering</title>
+
+    </head>
+
+    <body>
+        <h1>K-means Clustering Predicted Value</h1>
+
+        <form action="/kmeans_predict/{{kmeans.kmeansid}}" method="POST">
+            
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>You have entered the age: </label>
+                <input name="age" value="{{kmeans.age}}" readonly="1">
+            </div>
+
+            <br>
+            <br>
+            
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>You have entered the Income: </label>
+                <input name="income" value="{{kmeans.income}}" readonly="1">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>You have entered the Spending Score: </label>
+                <input name="spending_score" value="{{kmeans.spending_score}}" readonly="1">
+            </div>
+
+            <br>
+            <br>            
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>This value is near by this cluster: </label>
+                <input name="predicted_value" value="{{kmeans.predicted_value}}" readonly="1">
+            </div>
+
+        </form>
+
+        <br>
+        <br>
+
+        <a href="{{url_for('kmeans_algo.kmeans') }}">Go back to K-means Clustering page</a>  |  <a href="/">Home page</a>  |  <a href="{{url_for('kmeans_algo.kmeans_layout') }}">Click Here for view past entries</a>
+
+    </body>
+</html>
+
+
+

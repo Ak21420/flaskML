@@ -20,6 +20,7 @@ from logistic import logistic_algo
 from naive_bayes import naive_bayes_algo
 from decision import decision_tree_algo
 from svm import svm_algo
+from kmeans import kmeans_algo
 
 app = Flask(__name__, static_url_path = "", static_folder = "static", template_folder = "templates")
 app.secret_key = "cairocoders-ednalan"
@@ -31,6 +32,7 @@ app.register_blueprint(logistic_algo, url_prefix="")
 app.register_blueprint(naive_bayes_algo, url_prefix="")
 app.register_blueprint(decision_tree_algo, url_prefix="")
 app.register_blueprint(svm_algo, url_prefix="")
+app.register_blueprint(kmeans_algo, url_prefix="")
 
 DB_HOST = "localhost"
 DB_NAME = "mlModels"

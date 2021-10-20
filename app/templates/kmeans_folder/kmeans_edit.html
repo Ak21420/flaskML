@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>K means Clustering Algorithm Edit data</title>
+    </head>
+    <body>
+        <form action="/kmeans_update/{{kmeans.kmeansid}}" method="POST">
+        
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Enter your Age: </label>
+                <input name="age" value="{{kmeans.age}}" type="number" required="1" min="1" max="100">
+            </div>
+
+            <br>
+            <br>
+            
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Enter the Income: </label>
+                <input name="income" value="{{kmeans.income}}" type="number" required="1">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Enter your Spending Score (1-100): </label>
+                <input name="spending_score" value="{{kmeans.spending_score}}" type="number" required="1" min="1" max="100">
+            </div>
+
+            <br>
+            <br>
+            
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-block">
+                Update
+                </button>
+            </div>
+
+        </form>
+
+        <br>
+        <br>
+
+        <a href="{{url_for('kmeans_algo.kmeans') }}">Go back to K means Clustering page</a> | <a href="/">Home page</a>  |  <a href="{{url_for('kmeans_algo.kmeans_layout') }}">Go back to K means Clustering past data page</a>
+            
+    </body>
+</html>
