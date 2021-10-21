@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>DBSCAN Algorithm Edit data</title>
+    </head>
+    <body>
+        <form action="/dbscan_update/{{dbscan.dbscanid}}" method="POST">
+            
+    
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Enter your Number1: </label>
+                <input name="number1" value="{{dbscan.number1}}" required="1">
+            </div>
+
+            <br>
+            <br>
+            
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Enter the Number2: </label>
+                <input name="number2" value="{{dbscan.number2}}" required="1">
+            </div>
+
+            <br>
+            <br>
+            
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-block">
+                Update
+                </button>
+            </div>
+
+        </form>
+
+        <br>
+        <br>
+
+        <a href="{{url_for('dbscan_algo.dbscan') }}">Go back to DBSCAN page</a> | <a href="/">Home page</a>  |  <a href="{{url_for('dbscan_algo.dbscan_layout') }}">Go back to DBSCAN past data page</a>
+            
+    </body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+
+        <title>DBSCAN</title>
+
+    </head>
+
+    <body>
+        <h1>DBSCAN Predicted Value</h1>
+
+        <form action="/dbscan_predict/{{dbscan.dbscanid}}" method="POST">
+            
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>You have entered Number1: </label>
+                <input name="number1" value="{{dbscan.number1}}" readonly="1">
+            </div>
+
+            <br>
+            <br>
+            
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>You have entered Number2: </label>
+                <input name="number2" value="{{dbscan.number2}}" readonly="1">
+            </div>
+
+            <br>
+            <br>
+
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Number is in: </label>
+                <input name="predicted_value" value="{{dbscan.predicted_value}}" readonly="1">
+            </div>
+
+        </form>
+
+        <br>
+        <br>
+
+        <a href="{{url_for('dbscan_algo.dbscan') }}">Go back to DBSCAN page</a>  |  <a href="/">Home page</a>  |  <a href="{{url_for('dbscan_algo.dbscan_layout') }}">Click Here for view past entries</a>
+
+    </body>
+</html>
+
+
+

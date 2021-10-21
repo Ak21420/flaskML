@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+
+        <title>DBSCAN</title>
+
+    </head>
+
+    <body>
+        <h1>DBSCAN</h1>
+
+        <form action="{{url_for('dbscan_algo.dbscan')}}" method="POST">
+            
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Enter the Number1 (-10 to 10): </label>
+                <input name="number1"  required="1">
+            </div>
+
+            <br>
+            <br>
+            
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Enter the Number2 (-10 to 10): </label>
+                <input name="number2" required="1">
+            </div>
+
+            <br>
+            <br>
+
+            <input type="submit">
+
+        </form>
+       
+        <br>
+        <br>
+       
+        <a href="/">Go back to Home page</a>  |  <a href="{{url_for('dbscan_algo.dbscan_layout') }}">Click Here for view past entries</a>
+
+
+    </body>
+</html>
