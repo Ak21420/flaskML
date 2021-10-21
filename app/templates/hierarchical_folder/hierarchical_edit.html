@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Hierarchical Algorithm Edit data</title>
+    </head>
+    <body>
+        <form action="/hierarchical_update/{{hierarchical.hierarchicalid}}" method="POST">
+            
+    
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Enter total Fresh Products: </label>
+                <input name="fresh" type = "number" value="{{hierarchical.fresh}}" min="0" required="1">
+            </div>
+
+            <br>
+            <br>
+            
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Enter total Milk Products: </label>
+                <input name="milk" type = "number" value="{{hierarchical.milk}}" min="0" required="1">
+            </div>
+
+            <br>
+            <br>
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Enter total Grocery Products: </label>
+                <input name="grocery" type = "number" value="{{hierarchical.grocery}}" min="0" required="1">
+            </div>
+
+            <br>
+            <br>
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Enter total Frozen Products: </label>
+                <input name="frozen" type = "number" value="{{hierarchical.frozen}}" min="0" required="1">
+            </div>
+
+            <br>
+            <br>
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Enter total Detergent Paper Products: </label>
+                <input name="paper" type = "number" value="{{hierarchical.paper}}" min="0" required="1">
+            </div>
+
+            <br>
+            <br>
+            <div class="col-md-10 form-group" style="text-align: center"></div>
+                <label>Enter total Delicassen Products: </label>
+                <input name="delicassen" type = "number" value="{{hierarchical.delicassen}}" min="0" required="1">
+            </div>
+
+            <br>
+            <br>
+                
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-block">
+                Update
+                </button>
+            </div>
+
+        </form>
+
+        <br>
+        <br>
+
+        <a href="{{url_for('hierarchical_algo.hierarchical') }}">Go back to Hierarchical Clustering page</a> | <a href="/">Home page</a>  |  <a href="{{url_for('hierarchical_algo.hierarchical_layout') }}">Go back to Hierarchical Clustering past data page</a>
+            
+    </body>
+</html>

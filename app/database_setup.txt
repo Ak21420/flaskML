@@ -1,0 +1,201 @@
+Database name : mlModels
+
+
+
+
+Table name: Simple Linear regression
+
+CREATE TABLE simple (
+                SimpleID serial primary key NOT NULL,
+                txt_numbers text not null ,
+                datetime text not null,
+                image text,
+                is_delete bool
+            );
+
+Description: In this algorithm user will enter age as a comma separated value and it will predict
+             height. and if user will enter negative or 0 then it will shows the error or it will
+             automatically ignored the values.
+
+
+
+Table name: Multiple Linear regression
+
+CREATE TABLE multi (
+                MultiID serial primary key NOT NULL,
+                company_name text not null ,
+                car_models text not null ,
+                purchase_year int not null ,
+                fuel_type text not null ,
+                kilo_driven float not null,
+                predict_price float not null,
+                datetime text not null,
+                image text,
+                is_delete bool
+            );
+
+Description: In this algorithm user can predict old car resale price. User will have to enter Car-
+             company, Car Model, Purchase Year, Car Fuel Type & how many kilometers car have
+             travelled. Then you will get the predict value. In this algorithm if user will enter
+             kilometers as negative or 0 then it will shows the error.
+
+
+
+Table name: KNN Classification
+
+CREATE TABLE knn (
+                knnID serial primary key NOT NULL,
+                sepal_length float not null ,
+                sepal_width float not null ,
+                petal_length float not null ,
+                petal_width float not null ,
+                predicted_value text not null ,
+                datetime text not null,
+                is_delete bool
+            );
+
+Description: In this algorithm user can predict a flower type. User will have to enter Sepal Length,
+             Sepal Width, Petal Length, Petal Width and the algorithm gives the answer which type
+             of flower (Iris-setosa, Iris-virginica, Iris-versicolor) is this. If user will enter
+             kilometers as negative or 0 then it will shows the error.
+
+
+
+Table name: Support Vector Machine
+
+CREATE TABLE svm (
+                svmID serial primary key NOT NULL,
+                clump int not null,
+                unif_size int not null,
+                unif_shape int not null,
+                marg_adh int not null,
+                sing_epi_size int not null,
+                bare_nuc int not null,
+                bland_chrom int not null,
+                norm_nucl int not null,
+                mit int not null,
+                predict bool not null,
+                datetime text not null,
+                is_delete bool
+            );
+
+Description: In this algorithm user can predict a Cancer type. User will have to select Clump,
+             Unif Size, Unif Shape, Marg Adh, Sing Epi Size, Bare Nuc, Bland Chrom, Norm Nucl,
+             Mit and the algorithm gives the answer which type of cancer (Benign or Malignant)
+             is this. User have only 1 to 10 options to select.
+
+
+        
+Table name: Logistic regression
+
+CREATE TABLE logistic (
+                LogisticID serial primary key NOT NULL,
+                age text not null ,
+                expected_salary text not null ,
+                predicted_value text not null ,
+                datetime text not null,
+                is_delete bool
+            );
+
+Description: In this algorithm user can predict the customer will Purchase the computer or not on
+             the basis of customer age & Expected Salary.If user will enter age or expected salary
+             as negative or 0 then it will shows the error.
+
+
+
+Table name: Decision Tree
+
+CREATE TABLE decision (
+                DecisionID serial primary key NOT NULL,
+                t_name text not null,
+                ticket_no text not null,
+                tclass text not null,
+                t_age int not null,
+                fare float not null,
+                gender text not null,
+                embarked text not null,
+                family_member int not null,
+                predict int not null,
+                datetime text not null,
+                is_delete bool
+            );
+
+Description: In this algorithm user will predict the Passenger will survive or not in titanic. In
+             this algorithm user have to insert Passenger Name, Ticket No, Ticket Class, Passenger
+             Age, Ticket Fare, Passenger Gender, Embarked, Siblings & Parents. By this information
+             this algorithm will predict Passenger will survive or not. If user enter age, fare, 
+             no. of Siblings & Parents negative or 0 then it will shows the error.
+
+
+
+Table name: Naive Bayes
+
+CREATE TABLE naive (
+                NaiveID serial primary key NOT NULL,
+                message text not null ,
+                predict int not null,
+                datetime text not null,
+                is_delete bool
+            );
+
+Description: In this algorithm user will put a message in and predictthe message is spam or not.
+             If user will put "'" (Single inverted comma) then it will replace with blank space.
+
+
+
+Table name: K Means Clustering
+
+CREATE TABLE kmeans (
+                KmeansID serial primary key NOT NULL,
+                age int not null ,
+                income int not null ,
+                spending_score int not null, 
+                predicted_value text not null ,
+                datetime text not null,
+                is_delete bool
+            );
+
+Description: In this algorithm user can predict the type of customer and we can also predict the
+             which customer is spending more money on behalf or salary. There are 5 categories
+             General, Spend Thrift, Target, Miser, Careful. If user will enter negative or 0 in
+             age, income & spending score then it will shows the error.
+
+
+
+Table name: Hierarchical Clustering
+
+CREATE TABLE hierarchical (
+                hierarchicalID serial primary key NOT NULL,
+                fresh int not null ,
+                milk int not null ,
+                grocery int not null ,
+                frozen int not null ,
+                paper int not null ,
+                delicassen int not null ,
+                predicted_value text not null ,
+                datetime text not null,
+                is_delete bool
+            );
+
+Description: In this algorithm user will enter the product quantity how much a shop will purchase in
+             a year and we will predict the shop is Retail or Hotel/Restaurant/Cafe. There are fresh
+             product, milk product, grocery product, frozen product, detergent paper product & 
+             delicassen product categories. If user will input negative or 0 then it will shows the
+             error.        
+
+
+
+Table name: DBSCAN Clustering
+
+CREATE TABLE dbscan (
+                DbscanID serial primary key NOT NULL,
+                number1 text not null ,
+                number2 text not null ,
+                predicted_value text not null ,
+                datetime text not null,
+                is_delete bool
+            );
+
+Description: In this algorithm user can predict cluster or noise usinig 2 numbers (x,y). There are
+             3 type of cluasers (Cluster1, Cluster2, Cluster3). User can only input -10 to 10
+             otherwise it will shows the error.

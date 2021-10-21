@@ -213,18 +213,6 @@ def dbscan_update(id):
         print(data)
 
         return render_template('dbscan_folder/dbscan_pred.html', dbscan = data)
-        
-
-def floats_string_to_np_arr(floats_str):
-    def is_float(s):
-        try:
-            if float(s) >= 0:
-                return True
-        except:
-            return False
-
-    floats = np.array([float(x) for x in floats_str.split(',') if is_float(x)])
-    return floats.reshape(len(floats), 1)
 
 
 def check_values(values_array):
