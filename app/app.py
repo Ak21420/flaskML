@@ -38,15 +38,15 @@ app.register_blueprint(kmeans_algo, url_prefix="")
 app.register_blueprint(dbscan_algo, url_prefix="")
 app.register_blueprint(hierarchical_algo, url_prefix="")
 
-# DB_HOST = "localhost"
-# DB_NAME = "mlModels"
-# DB_USER = "admin"
-# DB_PASS = "admin"
+DB_HOST = "localhost"
+DB_NAME = "mlModels"
+DB_USER = "admin"
+DB_PASS = "admin"
 
-DB_HOST = "ec2-34-198-189-252.compute-1.amazonaws.com"
-DB_NAME = "ddld2ns19vlnjv"
-DB_USER = "xivflicthdwvyu"
-DB_PASS = "4c9d873a52e9f5aecb0e2e5c307adcdbddb50729594b73010a5bddc6f1acd43a"
+# DB_HOST = "ec2-34-198-189-252.compute-1.amazonaws.com"
+# DB_NAME = "ddld2ns19vlnjv"
+# DB_USER = "xivflicthdwvyu"
+# DB_PASS = "4c9d873a52e9f5aecb0e2e5c307adcdbddb50729594b73010a5bddc6f1acd43a"
 
 conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST)
 
